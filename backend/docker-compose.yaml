@@ -6,11 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./scr:/myfolder/scr
+      - ./src:/myfolder/src
     ports:
       - 3000:3000
     env_file:
-      - ./.env.docker
+      - ./.env
 
   my-database:
     platform: linux/x86_64

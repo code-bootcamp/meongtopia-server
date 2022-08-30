@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
@@ -17,6 +17,9 @@ export enum USER_ROLE_ENUM {
   ADMIN = 'ADMIN',
   CLIENT = 'CLIENT',
 }
+registerEnumType(USER_ROLE_ENUM, {
+  name: 'USER_ROLE_ENUM',
+});
 
 @ObjectType()
 @Entity()

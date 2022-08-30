@@ -1,7 +1,7 @@
 {
-  "name": "Meong Topia",
+  "name": "aaa",
   "version": "0.0.1",
-  "description": "애견카페 ",
+  "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -21,7 +21,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/cli": "^9.0.0",
     "@elastic/elasticsearch": "^8.2.1",
     "@google-cloud/storage": "^6.3.0",
     "@nestjs/apollo": "^10.0.17",
