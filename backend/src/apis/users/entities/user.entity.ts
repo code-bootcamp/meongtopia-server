@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
   Entity,
@@ -6,6 +7,8 @@ import {
   DeleteDateColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinTable,
 } from 'typeorm';
 
 //enum
@@ -45,6 +48,10 @@ export class User {
   @Column({ type: 'int', unsigned: true, default: 0 })
   @Field(() => Int)
   point: number;
+
+  @Column()
+  @Field(() => String)
+  storeName: string;
 
   @Column()
   @Field(() => String)
