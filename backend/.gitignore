@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+backend-358105-1aceab4c31fb.json
+.env*
 
 # Logs
 logs
