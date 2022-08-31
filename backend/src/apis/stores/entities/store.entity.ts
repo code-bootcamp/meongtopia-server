@@ -1,7 +1,7 @@
 import { float } from '@elastic/elasticsearch/lib/api/types';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Reservation } from 'src/apis/reservations/entities/reservation.entity';
-import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
+// import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
 import { StoreTag } from 'src/apis/storesTags/entities/storeTag.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
@@ -13,7 +13,7 @@ import {
   ManyToMany,
   ManyToOne,
   // OneToMany,
-  OneToOne,
+  // OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';

@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Store } from 'src/apis/stores/entities/store.entity';
+// import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
   Entity,
@@ -7,8 +7,8 @@ import {
   DeleteDateColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
-  JoinTable,
+  // OneToMany,
+  // JoinTable,
 } from 'typeorm';
 
 //enum
