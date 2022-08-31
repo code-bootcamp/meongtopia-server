@@ -22,7 +22,7 @@ registerEnumType(PAYMENT_ENUM, {
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  payment_id: string;
+  paymentID: string;
 
   @Column()
   @Field(() => String)
