@@ -78,11 +78,6 @@ export class Store {
   @Field(() => Reservation)
   reservation: Reservation;
 
-  @JoinTable()
-  @OneToOne(() => Pick)
-  @Field(() => Pick)
-  pick: Pick;
-
   //   @JoinTable()
   //   @OneToMany(() => storeImage, (imgurl) => imgurl.stores)
   //   @Field(() => [String])
