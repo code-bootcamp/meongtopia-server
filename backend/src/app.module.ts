@@ -3,9 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
