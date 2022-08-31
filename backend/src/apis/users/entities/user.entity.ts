@@ -60,6 +60,10 @@ export class User {
   @Field(() => String)
   businessLicenseImg: string;
 
+  @Column()
+  @Field(() => String)
+  profileImgUrl: string;
+
   @Column({ type: 'enum', enum: USER_ROLE_ENUM })
   @Field(() => USER_ROLE_ENUM)
   role: string;

@@ -6,7 +6,8 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 export class StoreTag {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  tagID: string;
+
   @Column()
   @Field(() => String)
   name: string;
