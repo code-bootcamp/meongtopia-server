@@ -1,30 +1,30 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  ManyToOne,
-  // OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
 @ObjectType()
-export class StoreImage {
+@Entity()
+export class ReviewResponse {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  storeImgID: string;
+  reviewResID: string;
 
   @Column()
   @Field(() => String)
-  storeImgurl: string;
+  contents: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  //, (store) => store.imgurl
-  @ManyToOne(() => Store)
-  @Field(() => [Store])
-  store: Store[];
 }
