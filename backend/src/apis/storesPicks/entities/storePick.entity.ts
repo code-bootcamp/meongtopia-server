@@ -23,7 +23,7 @@ export class Pick {
 
   @ManyToOne(() => User)
   @Field(() => [User])
-  users: User[];
+  user: User[];
 
   @ManyToOne(() => Store)
   @Field(() => [Store])

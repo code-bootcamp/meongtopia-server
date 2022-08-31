@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { ReviewResponse } from 'src/apis/reviewesResponses/entities/reviewResponse.entity';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import { User } from 'src/apis/users/entities/user.entity';
@@ -24,7 +24,10 @@ export class Review {
   @Field(() => String)
   content: string;
 
+  @Column()
+  @Field(() => Float)
   rating: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

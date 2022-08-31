@@ -18,7 +18,7 @@ export class StoreImage {
 
   @Column()
   @Field(() => String)
-  storeImgurl: string;
+  url: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
