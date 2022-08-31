@@ -17,6 +17,7 @@ export enum USER_ROLE_ENUM {
   ADMIN = 'ADMIN',
   CLIENT = 'CLIENT',
 }
+//enum type 등록
 registerEnumType(USER_ROLE_ENUM, {
   name: 'USER_ROLE_ENUM',
 });

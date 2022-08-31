@@ -62,7 +62,7 @@ export class Store {
   avgRating: float;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
