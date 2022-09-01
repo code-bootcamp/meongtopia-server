@@ -1,4 +1,4 @@
-import { float } from '@elastic/elasticsearch/lib/api/types';
+// import { float } from '@elastic/elasticsearch/lib/api/types';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Reservation } from 'src/apis/reservations/entities/reservation.entity';
 // import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
@@ -33,7 +33,7 @@ export class Store {
   @Field(() => String)
   description: string;
 
-  @Column({ nullable: true })
+  @Column()
   @Field(() => Int)
   entranceFee: number;
 
@@ -53,13 +53,13 @@ export class Store {
   @Field(() => String)
   address: string;
 
-  @Column()
-  @Field(() => String)
-  detailedAddress: string;
-
   @Column({ default: 0 })
   @Field(() => Float)
-  avgRating: float;
+  avgRating: number;
+
+  @Column()
+  @Field(() => String)
+  menuImg: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
