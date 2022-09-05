@@ -31,43 +31,43 @@ export class User {
 
   @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
   @Field(() => String)
-  name: string;
+  name?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   @Field(() => String)
-  nickname: string;
+  nickname?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: false })
   @Field(() => String)
   email: string;
 
   @Column({ nullable: false })
-  // @Field(() => String)
+  @Field(() => String)
   password: string;
 
-  @Column({ type: 'char', length: 11, nullable: false })
+  @Column({ type: 'char', length: 11, nullable: true })
   @Field(() => String)
   phone: string;
 
-  @Column({ type: 'int', unsigned: true, default: 0 })
+  @Column({ type: 'int', unsigned: true, default: 0, nullable: true })
   @Field(() => Int)
-  point: number;
+  point?: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
-  storeName: string;
+  storeName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
-  businessLicenseImg: string;
+  businessLicenseImg?: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
-  profileImgUrl: string;
+  profileImgUrl?: string;
 
-  @Column({ type: 'enum', enum: USER_ROLE_ENUM })
+  @Column({ type: 'enum', enum: USER_ROLE_ENUM, nullable: true })
   @Field(() => USER_ROLE_ENUM)
-  role: string;
+  role?: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
