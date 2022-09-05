@@ -58,31 +58,30 @@ export class AuthResolver {
   async logout(
     @Context() context: any, //
   ) {
-    console.log(context.req.rawHeaders, '==========');
-    console.log(context.req.headers.cookie, '@@@@@@@@@');
-
     const header = JSON.parse(JSON.stringify(context.req.headers));
     const refreshToken = header.cookie.replace('refreshToken=', '');
 
     const accessToken = header.authorization.replace('Bearer ', '');
 
+    console.log(refreshToken, '========');
+    console.log(accessToken, '----------');
+
+    await this.cacheManager.set(
+      `refreshToken:${refreshToken}`,
+      'refreshToken',
+      {
+        ttl: 180,
+      },
+    );
+    await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
+      ttl: 180,
+    });
     try {
       jwt.verify(accessToken, 'myAccessKey'),
         jwt.verify(refreshToken, 'myRefreshKey');
     } catch {
       throw new UnauthorizedException();
     }
-
-    await this.cacheManager.set(
-      `refreshToken:${refreshToken}`,
-      'refreshToken',
-      {
-        ttl: 0,
-      },
-    );
-    await this.cacheManager.set(`accessToken:${accessToken}`, 'accessToken', {
-      ttl: 0,
-    });
 
     const mycache1 = await this.cacheManager.get(
       `refreshToken:${refreshToken}`,

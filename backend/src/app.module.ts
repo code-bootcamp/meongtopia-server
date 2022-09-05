@@ -14,6 +14,7 @@ import { StrLocationsTagsModule } from './apis/strLocationsTags/strLocationsTags
 import { ReviewesModule } from './apis/reviewes/reviewes.module';
 import { ReviewesResponsesModule } from './apis/reviewesResponses/reviewesResponses.module';
 import { PetsModule } from './apis/pets/pets.module';
+import { AuthModule } from './apis/auths/auths.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PetsModule } from './apis/pets/pets.module';
     StrLocationsTagsModule,
     StoresImgsModule,
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

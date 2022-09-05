@@ -15,6 +15,18 @@ export interface IOAuthUser {
     hashedPassword: string;
     name: string;
     email: string;
-    age: number;
+    // age: number;
   };
 }
+
+// export interface IOAuthUser {
+//   user: {
+//     name: string;
+//     phonenumber: number;
+//     email: string;
+//     address: string;
+//     hashedPassword: string;
+//     signupdate: Date;
+//     age: number;
+//   };
+// }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
 
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,7 +22,7 @@ import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
     JwtNaverStrategy,
     AuthResolver, //
     AuthService,
-    UserService,
+    UsersService,
   ],
   controllers: [
     AuthController, //

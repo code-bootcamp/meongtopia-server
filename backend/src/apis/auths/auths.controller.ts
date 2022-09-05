@@ -1,25 +1,14 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
 import { AuthService } from './auths.service';
 import { Request, Response } from 'express';
-
-interface IOAuthUser {
-  user: {
-    name: string;
-    phonenumber: number;
-    email: string;
-    address: string;
-    hashedPassword: string;
-    signupdate: Date;
-    age: number;
-  };
-}
+import { IOAuthUser } from 'src/commons/type/context';
 
 @Controller()
 export class AuthController {
   constructor(
-    private readonly usersService: UserService, //
+    private readonly usersService: UsersService, //
     private readonly authService: AuthService,
   ) {}
 

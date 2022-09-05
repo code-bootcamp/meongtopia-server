@@ -41,9 +41,9 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   @Field(() => String)
-  password: string;
+  password?: string;
 
   @Column({ type: 'char', length: 11, nullable: true })
   @Field(() => String)
