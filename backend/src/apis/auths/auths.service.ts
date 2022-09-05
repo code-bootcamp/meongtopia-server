@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService, //
-    private readonly usersService: UserService,
+    private readonly usersService: UsersService,
   ) {}
 
   async setRefreshToken({ res, req }) {
@@ -17,11 +17,12 @@ export class AuthService {
     if (!user) {
       user = await this.usersService.create({
         ...req.user,
+        role: 'CLIENT',
       });
     }
 
     const refreshToken = this.jwtService.sign(
-      { email: user.email, sub: user.id },
+      { email: user.email, sub: user.userID },
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
     //쿠키에 넣어준다
@@ -33,14 +34,12 @@ export class AuthService {
     // //프론트는 어떤 사이트?
     // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com')
 
-    return res.redirect(
-      'http://localhost:5500/homework/day21/frontend/login/index.html',
-    );
+    return res.redirect('http://localhost:5500/frontend/login/index.html');
   }
 
   getAccessToken({ user }) {
     return this.jwtService.sign(
-      { email: user.email, sub: user.id },
+      { email: user.email, sub: user.userID },
       { secret: 'myAccessKey', expiresIn: '5h' },
     );
   }
