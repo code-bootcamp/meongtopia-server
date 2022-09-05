@@ -1,19 +1,16 @@
-// import { float } from '@elastic/elasticsearch/lib/api/types';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Reservation } from 'src/apis/reservations/entities/reservation.entity';
-// import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
 import { StoreTag } from 'src/apis/storesTags/entities/storeTag.entity';
+import { StrLocationTag } from 'src/apis/strLocationsTags/entities/strLocationTag.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
-  // OneToMany,
-  // OneToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -53,7 +50,7 @@ export class Store {
   @Field(() => String)
   address: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 5 })
   @Field(() => Float)
   avgRating: number;
 
@@ -70,18 +67,19 @@ export class Store {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User)
+  @JoinColumn()
+  @OneToOne(() => StrLocationTag)
+  @Field(() => StrLocationTag)
+  locationTag: StrLocationTag;
+
+  // @ManyToOne(() => User)
+  // @Field(() => User)
+  // user: User;
+
+  @JoinColumn()
+  @OneToOne(() => User)
   @Field(() => User)
   user: User;
-
-  @ManyToOne(() => Reservation)
-  @Field(() => Reservation)
-  reservation: Reservation;
-
-  //   @JoinTable()
-  //   @OneToMany(() => storeImage, (imgurl) => imgurl.stores)
-  //   @Field(() => [String])
-  //   imgurl: string[];
 
   @JoinTable()
   @ManyToMany(() => StoreTag, (storeTag) => storeTag.store)

@@ -1,11 +1,14 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Payment } from 'src/apis/payments/entities/payment.entity';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 
@@ -29,4 +32,9 @@ export class Income {
   @ManyToOne(() => Store)
   @Field(() => Store)
   store: Store;
+
+  @JoinColumn()
+  @OneToOne(() => Payment)
+  @Field(() => Payment)
+  payment: Payment;
 }
