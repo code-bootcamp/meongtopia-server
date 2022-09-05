@@ -1,9 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,4 +29,8 @@ export class ReviewResponse {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToOne(() => User)
+  @Field(() => [User])
+  user: User[];
 }

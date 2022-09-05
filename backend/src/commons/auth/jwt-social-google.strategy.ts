@@ -14,13 +14,11 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   validate(accessToken, refreshToken, profile) {
     console.log(accessToken);
     console.log(refreshToken);
-    console.log(profile);
+    console.log(profile, '========');
 
     return {
       email: profile.emails[0].value,
-      hashedPassword: '12312313123312',
       name: profile.displayName,
-      age: 0, //유저에게 새로받기.
     };
   }
 }
