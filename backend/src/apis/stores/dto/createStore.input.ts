@@ -1,9 +1,9 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
-// import { ImageInput } from 'src/apis/images/dto/image.input';
+import { CreatePetInput } from 'src/apis/pets/dto/createPet.input';
 
 @InputType()
-export class CreateStoreInput {
+export class createStoreInput {
   @Field(() => String)
   name: string;
 
@@ -18,7 +18,10 @@ export class CreateStoreInput {
   phone: string;
 
   @Field(() => String)
-  runTime: string;
+  open: string;
+
+  @Field(() => String)
+  close: string;
 
   @Field(() => String)
   address: string;
@@ -26,8 +29,8 @@ export class CreateStoreInput {
   @Field(() => String)
   menuImg: string;
 
-  @Field(() => [String])
-  pet: string[];
+  @Field(() => [CreatePetInput])
+  pet: CreatePetInput[];
 
   @Field(() => [String])
   storeImage: string[];
@@ -35,6 +38,6 @@ export class CreateStoreInput {
   @Field(() => [String])
   storeTag: string[];
 
-  @Field(() => [String])
-  gameGenre: string[];
+  @Field(() => String)
+  locationTag: string;
 }

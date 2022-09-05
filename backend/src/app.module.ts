@@ -7,11 +7,25 @@ import { UsersModule } from './apis/users/users.module';
 import { StoresModule } from './apis/stores/stores.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { StoreTagsModule } from './apis/storesTags/storesTags.module';
+import { StoresImgsModule } from './apis/storesImgs/storesImgs.module';
+import { StoresPicksModule } from './apis/storesPicks/storesPicks.module';
+import { StrLocationsTagsModule } from './apis/strLocationsTags/strLocationsTags.module';
+import { ReviewesModule } from './apis/reviewes/reviewes.module';
+import { ReviewesResponsesModule } from './apis/reviewesResponses/reviewesResponses.module';
+import { PetsModule } from './apis/pets/pets.module';
 
 @Module({
   imports: [
-    UsersModule,
+    PetsModule,
+    ReviewesModule,
+    ReviewesResponsesModule,
     StoresModule,
+    StoresPicksModule,
+    StoreTagsModule,
+    StrLocationsTagsModule,
+    StoresImgsModule,
+    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

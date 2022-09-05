@@ -3,7 +3,8 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
-import { CreateStoreInput } from './dto/createStore.input';
+import { createStoreInput } from './dto/createStore.input';
+import { updateStoreInput } from './dto/updateStore.input';
 import { Store } from './entities/store.entity';
 import { StoresService } from './stores.service';
 
@@ -20,12 +21,15 @@ export class StoresResolver {
   async fetchStores(
     @Args({ name: 'search', nullable: true }) search: string, //
   ) {
-    // 상품검색, redis에 먼저 들려서 이전에 다른 사용자가 이미 검색한 결과가 있다면, redis에서 먼저가져오기
+    // 상품검색,
+    //redis에 먼저 들려서 이전에 다른 사용자가 이미 검색한 결과가 있다면, redis에서 먼저가져오기
+    //가게 이름으로 검색
     const storeCache = await this.cacheManager.get(`store:${search}`);
     if (storeCache) return storeCache;
+
     const storeES = await this.elasticsearchService.search({
       query: {
-        term: { address: search, detailedAddress: search }, //보류,,이렇게 es 해도되나?
+        term: { name: search },
       },
     });
     const searchData = storeES.hits.hits.map((row) => {
@@ -41,31 +45,42 @@ export class StoresResolver {
   fetchStoresTag(
     @Args('name') name: string, //
   ) {
-    return this.storesService.findTag(name);
+    return this.storesService.findTag({ name });
   }
 
   @Query(() => [Store])
-  fetchStoresLocation() {
-    return this.storesService.findLocation();
+  fetchStoresLocation(
+    @Args('name') name: string, //
+  ) {
+    return this.storesService.findLocation({ name });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Store)
   createStore(
-    @Args('createStoreInput') createStoreInput: CreateStoreInput, //
+    @Args('createStoreInput') createStoreInput: createStoreInput, //
     @Context() context: any,
   ) {
     const email = context.req.user.email;
-    return this.storesService.create({ email, ...createStoreInput });
+    return this.storesService.create({ email, createStoreInput });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Store)
-  updateStore() {
-    return this.storesService.update();
+  updateStore(
+    @Args('updateStoreInput') updateStoreInput: updateStoreInput, //
+    @Context() context: any,
+  ) {
+    const email = context.req.user.email;
+    return this.storesService.update({ email, updateStoreInput });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  deleteStore() {
-    return this.storesService.delete();
+  deleteStore(
+    @Context() context: any, //
+  ) {
+    const email = context.req.user.email;
+    return this.storesService.delete({ email });
   }
 }
