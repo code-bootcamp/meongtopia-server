@@ -43,7 +43,7 @@ export class Review {
   user: User[];
 
   @JoinColumn()
-  @OneToOne(() => ReviewResponse)
+  @OneToOne(() => ReviewResponse, { nullable: true })
   @Field(() => ReviewResponse)
-  reviewRes: ReviewResponse;
+  reviewRes?: ReviewResponse;
 }

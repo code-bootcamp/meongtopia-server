@@ -27,6 +27,11 @@ export class StoresService {
     @InjectRepository(StrLocationTag)
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
   ) {}
+  async findOne({ storeID }) {
+    return await this.storesRepository.findOne({
+      where: { storeID },
+    });
+  }
 
   async findTag({ name }) {
     const storeTag = await this.storeTagsRepository.findOne({
@@ -39,7 +44,7 @@ export class StoresService {
   }
 
   async findLocation({ name }) {
-    const locationTag = await this.storeTagsRepository.findOne({
+    const locationTag: any = await this.storeTagsRepository.findOne({
       where: { name },
     });
     const stores = await this.storesRepository.find({
@@ -50,26 +55,33 @@ export class StoresService {
 
   async create({ email, createStoreInput }) {
     try {
-      //유저 정보 꺼내오기(1-1)
+      //유저 정보 꺼내오기
       const user = await this.usersRepository.findOne({ where: { email } });
+
       const { pet, storeImage, storeTag, locationTag, ...store } =
         createStoreInput;
 
       //다대다 태그 저장
-      const tag = storeTag.map(async (name) => {
-        const tag = await this.storeTagsRepository.findOne({
-          where: name,
+      const tag = [];
+      for (let i = 0; i < storeTag.length; i++) {
+        const tagIs = await this.storeTagsRepository.findOne({
+          where: { name: storeTag[i] },
         });
-        return tag.tagID;
-      });
+        tag.push(tagIs);
+      }
+
       const locationTagData = await this.StrLocationTagRepository.findOne({
         where: { name: locationTag },
       });
+      if (!locationTagData) {
+        throw new ConflictException('해당 지역 태그가 없습니다.');
+      }
 
-      //일대일 유저 정보 저장
+      //일대일 정보 저장
       const storeData = await this.storesRepository.save({
         user,
         locationTag: locationTagData,
+        storeTag: tag,
         ...store,
       });
 
@@ -78,7 +90,7 @@ export class StoresService {
         await this.petRepository.save({
           ...pet,
           store: storeData,
-          storeTag: tag,
+          storeTag,
         });
       });
 
@@ -92,7 +104,7 @@ export class StoresService {
 
       return storeData;
     } catch (error) {
-      throw new error('유저 생성이 실패하였습니다.');
+      throw new error('가게 생성에 실패하였습니다.');
     }
   }
 

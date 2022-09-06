@@ -12,13 +12,13 @@ export class StrLocationsTagsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [StrLocationTag])
-  fetchTags() {
+  fetchLocationTags() {
     return this.strLocationsTagsService.findAll();
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => StrLocationTag)
-  createTag(
+  createLocationTag(
     @Args('name') name: string, //
   ) {
     return this.strLocationsTagsService.create({ name });
@@ -26,7 +26,7 @@ export class StrLocationsTagsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => StrLocationTag)
-  updateTag(
+  updateLocationTag(
     @Args('before') before: string, //
     @Args('after') after: string,
   ) {
@@ -35,7 +35,7 @@ export class StrLocationsTagsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  deleteTag(
+  deleteLocationTag(
     @Args('name') name: string, //
   ) {
     return this.strLocationsTagsService.delete({ name });

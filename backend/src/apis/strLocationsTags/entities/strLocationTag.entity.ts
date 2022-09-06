@@ -1,5 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -11,4 +16,7 @@ export class StrLocationTag {
   @Column()
   @Field(() => String)
   name: string;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

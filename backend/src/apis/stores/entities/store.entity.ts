@@ -10,6 +10,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -50,7 +51,7 @@ export class Store {
   @Field(() => String)
   address: string;
 
-  @Column({ default: 5 })
+  @Column({ default: 5, type: 'double' })
   @Field(() => Float)
   avgRating: number;
 
@@ -67,14 +68,9 @@ export class Store {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @JoinColumn()
-  @OneToOne(() => StrLocationTag)
+  @ManyToOne(() => StrLocationTag)
   @Field(() => StrLocationTag)
   locationTag: StrLocationTag;
-
-  // @ManyToOne(() => User)
-  // @Field(() => User)
-  // user: User;
 
   @JoinColumn()
   @OneToOne(() => User)
