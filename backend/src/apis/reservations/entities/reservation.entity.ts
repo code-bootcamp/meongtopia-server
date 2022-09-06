@@ -18,9 +18,21 @@ export class Reservation {
   @Field(() => String)
   resID: string;
 
-  @Column()
+  @Column({ nullable: true })
+  @Field(() => String)
+  start?: string;
+
+  @Column({ nullable: true })
+  @Field(() => String)
+  end?: string;
+
+  @Column({ nullable: true })
   @Field(() => Int)
   members: number;
+
+  @Column({ nullable: true })
+  @Field(() => Int)
+  dogamount: number;
 
   @JoinColumn()
   @ManyToOne(() => User)
