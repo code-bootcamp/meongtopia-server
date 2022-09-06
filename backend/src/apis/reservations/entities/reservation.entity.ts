@@ -23,7 +23,7 @@ export class Reservation {
   members: number;
 
   @JoinColumn()
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @Field(() => User)
   user: User;
 
@@ -34,5 +34,5 @@ export class Reservation {
 
   @ManyToOne(() => Store)
   @Field(() => Store)
-  reservation: Store;
+  store: Store;
 }

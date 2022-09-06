@@ -63,7 +63,7 @@ export class User {
 
   @Column({ nullable: true })
   @Field(() => String)
-  profileImgUrl?: string;
+  profileImgUrl: string;
 
   @Column({ type: 'enum', enum: USER_ROLE_ENUM, nullable: true })
   @Field(() => USER_ROLE_ENUM)
