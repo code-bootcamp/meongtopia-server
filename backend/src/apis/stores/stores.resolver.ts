@@ -41,6 +41,11 @@ export class StoresResolver {
     return searchData;
   }
 
+  @Query(() => Store)
+  fetchStore(@Args('storeID') storeID: string) {
+    return this.storesService.findOne({ storeID });
+  }
+
   @Query(() => [Store])
   fetchStoresTag(
     @Args('name') name: string, //
