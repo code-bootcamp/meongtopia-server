@@ -27,7 +27,6 @@ export class AuthResolver {
     @Args('password') password: string,
     @Context() context: IContext,
   ) {
-    console.log(context.req, '@@@@@@@@');
     //1. 로그인(이메일이 일치하는 유저를 DB에서 찾기)
     const user = await this.usersService.findUserOne({ email }); //왜 where 안해요??
 
@@ -63,9 +62,6 @@ export class AuthResolver {
 
     const accessToken = header.authorization.replace('Bearer ', '');
 
-    console.log(refreshToken, '========');
-    console.log(accessToken, '----------');
-
     await this.cacheManager.set(
       `refreshToken:${refreshToken}`,
       'refreshToken',
@@ -83,13 +79,11 @@ export class AuthResolver {
       throw new UnauthorizedException();
     }
 
-    const mycache1 = await this.cacheManager.get(
-      `refreshToken:${refreshToken}`,
-    );
-    const mycache2 = await this.cacheManager.get(`accessToken:${accessToken}`);
+    await this.cacheManager.get(`refreshToken:${refreshToken}`);
+    await this.cacheManager.get(`accessToken:${accessToken}`);
 
-    console.log(mycache1, '$$$$$');
-    console.log(mycache2, '*****');
+    // console.log(mycache1, '$$$$$');
+    // console.log(mycache2, '*****');
     return '로그아웃에 성공 하였습니다.';
   }
 }

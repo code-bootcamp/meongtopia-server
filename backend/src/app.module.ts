@@ -15,6 +15,7 @@ import { ReviewesModule } from './apis/reviewes/reviewes.module';
 import { ReviewesResponsesModule } from './apis/reviewesResponses/reviewesResponses.module';
 import { PetsModule } from './apis/pets/pets.module';
 import { AuthModule } from './apis/auths/auths.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthModule } from './apis/auths/auths.module';
     StoresImgsModule,
     UsersModule,
     AuthModule,
+    FilesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
