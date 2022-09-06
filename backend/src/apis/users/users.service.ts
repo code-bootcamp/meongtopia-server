@@ -56,6 +56,14 @@ export class UsersService {
       password,
       role,
     });
+
+    const newuser = await this.userRepository.findOne({
+      where: { email: createUserInput.email },
+    });
+    if (newuser.role === 'OWNER') {
+      console.log('dddddddd');
+    }
+
     return userData;
   }
 
@@ -123,7 +131,7 @@ export class UsersService {
       const myuser = await this.userRepository.findOne({
         where: { email: email },
       });
-      const result = this.userRepository.save({
+      const result = await this.userRepository.save({
         ...myuser,
         password: newhashedPassword,
       });
@@ -133,7 +141,7 @@ export class UsersService {
     }
   }
 
-  async upload({ files }) {
+  async upload({ files, email }) {
     // 파일을 클라우드 스토리지에 저장하는 로직
 
     //스토리지 저장 필요 yarn add google-cloud/storage
@@ -144,7 +152,7 @@ export class UsersService {
     const bucket = process.env.BUCKET;
     const storage = new Storage({
       projectId: process.env.GCP_PROJECT_ID,
-      keyFilename: 'gcp-file-storage.json',
+      keyFilename: process.env.GCP_PROJECT_KEY_FILENAME,
     }).bucket(bucket);
 
     const imagefileurl = await Promise.all(
@@ -153,24 +161,25 @@ export class UsersService {
           new Promise((resolve, reject) => {
             el.createReadStream()
               .pipe(storage.file(el.filename).createWriteStream())
-              .on('finish', () => resolve(`${bucket}/${el.filename}`))
+              .on('finish', () =>
+                resolve(`${bucket}/profileURL/${el.filename}`),
+              )
               .on('error', () => reject('실패'));
           }),
       ),
     );
-    // const myuser = await this.userRepository.findOne({
-    //   where: { email: email },
-    // });
-    // console.log(imagefileurl);
-    // console.log(myuser);
-    // const profileImgUrl = imagefileurl[0];
-    // await this.userRepository.save({
-    //   ...myuser,
-    //   email: email,
-    //   profileImgUrl: profileImgUrl,
-    // });
+    const imgUrl: any = imagefileurl[0];
 
-    return imagefileurl[0];
+    const myuser = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    await this.userRepository.save({
+      ...myuser,
+      email: email,
+      profileImgUrl: imgUrl,
+    });
+    return imgUrl;
   }
 
   async deleteprofile({ email }) {

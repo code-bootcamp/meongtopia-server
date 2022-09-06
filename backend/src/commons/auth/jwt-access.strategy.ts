@@ -15,18 +15,12 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      //위와 동일한 코드
-      //   jwtFromRequest: (req) => {
-      //     const accessToken = req.headers.Authorization; //"Bearer tokenText"
-      //     const result = accessToken.replace('Bearer', '');
-      //     return result;
-      //   },
       secretOrKey: 'myAccessKey',
+      passReqToCallback: true,
     });
   }
 
-  async validate(req, payload) {
-    console.log(payload);
+  async validate(req, payload: any) {
     const header = JSON.parse(JSON.stringify(req.headers));
     const accessToken = header.authorization.replace('Bearer ', '');
 

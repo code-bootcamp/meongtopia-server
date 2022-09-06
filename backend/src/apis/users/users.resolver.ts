@@ -50,9 +50,9 @@ export class UsersResolver {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'OWNER';
     return this.usersService.create({
+      ...createUserInput,
       hashedPassword,
       role,
-      ...createUserInput,
     });
   }
 
@@ -79,12 +79,17 @@ export class UsersResolver {
     return this.usersService.update({ email, updateUserInput });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async uploadFile(
+    @Context() context: any, //
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload, //
   ) {
+    const email = context.req.user.email;
+    console.log(email);
     return await this.usersService.upload({
       files,
+      email,
     });
   }
 
@@ -100,13 +105,12 @@ export class UsersResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async updateUserPwd(
+    @Args('email') email: string,
     @Args('updateUserPwdInput') updateUserPwdInput: string,
-    @Context() context: any,
   ) {
-    console.log(context.req.user.email);
-    const email = context.req.user.email;
+    console.log(email);
     const hashedPassword = await bcrypt.hash(updateUserPwdInput, 10.2);
-    return this.usersService.updatePwd({ email, hashedPassword });
+    return await this.usersService.updatePwd({ email, hashedPassword });
   }
 
   @Mutation(() => Boolean)
