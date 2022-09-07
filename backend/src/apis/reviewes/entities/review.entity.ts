@@ -22,7 +22,7 @@ export class Review {
 
   @Column()
   @Field(() => String)
-  content: string;
+  contents: string;
 
   @Column()
   @Field(() => Float)
