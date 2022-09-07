@@ -50,7 +50,7 @@ import { FilesModule } from './apis/files/files.module';
         origin: [
           process.env.CORS_ORIGIN_DEV,
           // process.env.CORS_ORIGIN_TEST,
-          // process.env.CORS_ORIGIN_PROD,
+          process.env.CORS_ORIGIN_PROD,
         ],
       },
     }),

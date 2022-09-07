@@ -18,6 +18,7 @@ export class AuthService {
       user = await this.usersService.create({
         ...req.user,
         role: 'CLIENT',
+        access: 'ALLOWED',
       });
     }
 
@@ -27,6 +28,7 @@ export class AuthService {
     );
     //쿠키에 넣어준다
     //개발환경
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Set-Cookie', `refreshToken = ${refreshToken}; path=/;`);
     //배포환경
     //브라우저로 보냄 알아서 다함(team project떄 사용)

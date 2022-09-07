@@ -1,9 +1,8 @@
 export function getToday() {
-  const aaa = new Date();
-  const year = aaa.getFullYear();
-  const month = aaa.getMonth() + 1;
-  const day = aaa.getDate();
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
 
-  const today = `${year}-${month}-${day}`;
-  return today;
+  return `${year}-${month}-${day}`;
 }

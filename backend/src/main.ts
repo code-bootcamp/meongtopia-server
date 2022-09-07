@@ -13,7 +13,7 @@ async function bootstrap() {
     origin: [
       process.env.CORS_ORIGIN_DEV,
       // process.env.CORS_ORIGIN_TEST,
-      // process.env.CORS_ORIGIN_PROD,
+      process.env.CORS_ORIGIN_PROD,
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: [
