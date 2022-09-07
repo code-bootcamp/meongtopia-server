@@ -37,6 +37,22 @@ import { FilesModule } from './apis/files/files.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      cors: {
+        Credential: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: [
+          'Access-Control-Allow-Headers',
+          'Authorization',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+        ],
+        origin: [
+          process.env.CORS_ORIGIN_DEV,
+          // process.env.CORS_ORIGIN_TEST,
+          // process.env.CORS_ORIGIN_PROD,
+        ],
+      },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
