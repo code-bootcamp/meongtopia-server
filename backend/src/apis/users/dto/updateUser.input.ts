@@ -2,30 +2,30 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateUserInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   nickname?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   password?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   phone?: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   point?: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   storeName?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   businessLicenseImg?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   profileImgUrl?: string;
 }
