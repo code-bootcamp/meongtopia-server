@@ -28,7 +28,7 @@ export class AuthResolver {
     @Context() context: IContext,
   ) {
     //1. 로그인(이메일이 일치하는 유저를 DB에서 찾기)
-    const user = await this.usersService.findUserOne({ email }); //왜 where 안해요??
+    const user = await this.usersService.findUserOne({ email });
 
     //2. 일치하는 유저가 없으면?(에러 던지기)
     if (!user) throw new UnprocessableEntityException('이메일이 없습니다.');

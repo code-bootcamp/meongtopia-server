@@ -29,9 +29,9 @@ export class User {
   @Field(() => String)
   userID: string;
 
-  @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 20, unique: true })
   @Field(() => String)
-  name?: string;
+  name: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   @Field(() => String)
@@ -41,17 +41,17 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Column({ nullable: true })
+  @Column()
   @Field(() => String)
-  password?: string;
+  password: string;
 
   @Column({ type: 'char', length: 11, nullable: true })
   @Field(() => String)
   phone: string;
 
-  @Column({ type: 'int', unsigned: true, default: 0, nullable: true })
+  @Column({ type: 'int', unsigned: true, default: 0 })
   @Field(() => Int)
-  point?: number;
+  point: number;
 
   @Column({ nullable: true })
   @Field(() => String)
