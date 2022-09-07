@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 import { StrLocationTag } from './entities/strLocationTag.entity';
 import { StrLocationsTagsResolver } from './strLocationsTags.resolver';
 import { StrLocationsTagsService } from './strLocationsTags.service';
@@ -8,6 +9,7 @@ import { StrLocationsTagsService } from './strLocationsTags.service';
   imports: [
     TypeOrmModule.forFeature([
       StrLocationTag, //
+      User,
     ]),
   ],
   providers: [

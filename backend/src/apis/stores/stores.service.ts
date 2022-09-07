@@ -27,6 +27,7 @@ export class StoresService {
     @InjectRepository(StrLocationTag)
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
   ) {}
+
   async findOne({ storeID }) {
     return await this.storesRepository.findOne({
       where: { storeID },
@@ -57,6 +58,12 @@ export class StoresService {
     try {
       //유저 정보 꺼내오기
       const user = await this.usersRepository.findOne({ where: { email } });
+      if (user.role !== 'OWNER') {
+        throw new ConflictException('해당 권한이 존재하지 않습니다.');
+      }
+      if ((user.access = 'PENDDING')) {
+        throw new ConflictException('아직 승인되지 않은 유저입니다.');
+      }
 
       const { pet, storeImage, storeTag, locationTag, ...store } =
         createStoreInput;

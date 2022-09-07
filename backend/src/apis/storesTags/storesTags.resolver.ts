@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { StoreTag } from './entities/storeTag.entity';
 import { StoreTagsService } from './storesTags.service';
@@ -12,16 +12,21 @@ export class StoreTagsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [StoreTag])
-  fetchTags() {
-    return this.storeTagsService.findAll();
+  fetchTags(
+    @Context() context: any, //
+  ) {
+    const email = context.req.user.email;
+    return this.storeTagsService.findAll({ email });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => StoreTag)
   createTag(
+    @Context() context: any,
     @Args('name') name: string, //
   ) {
-    return this.storeTagsService.create({ name });
+    const email = context.req.user.email;
+    return this.storeTagsService.create({ name, email });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -29,15 +34,19 @@ export class StoreTagsResolver {
   updateTag(
     @Args('before') before: string, //
     @Args('after') after: string,
+    @Context() context: any,
   ) {
-    return this.storeTagsService.update({ before, after });
+    const email = context.req.user.email;
+    return this.storeTagsService.update({ before, after, email });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteTag(
     @Args('name') name: string, //
+    @Context() context: any,
   ) {
-    return this.storeTagsService.delete({ name });
+    const email = context.req.user.email;
+    return this.storeTagsService.delete({ name, email });
   }
 }

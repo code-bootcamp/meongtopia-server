@@ -22,6 +22,14 @@ registerEnumType(USER_ROLE_ENUM, {
   name: 'USER_ROLE_ENUM',
 });
 
+export enum ACCESS_ENUM {
+  ALLOWED = 'ALLOWED',
+  PENDDING = 'PENDDING',
+}
+registerEnumType(ACCESS_ENUM, {
+  name: 'ACCESS_ENUM',
+});
+
 @ObjectType()
 @Entity()
 export class User {
@@ -68,6 +76,10 @@ export class User {
   @Column({ type: 'enum', enum: USER_ROLE_ENUM, nullable: true })
   @Field(() => USER_ROLE_ENUM)
   role?: string;
+
+  @Column({ type: 'enum', enum: ACCESS_ENUM })
+  @Field(() => ACCESS_ENUM)
+  access: string;
 
   @DeleteDateColumn()
   deletedAt: Date;

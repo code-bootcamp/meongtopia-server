@@ -2,14 +2,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/apis/users/entities/user.entity';
-import { Repository } from 'typeorm';
 
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {
@@ -21,14 +16,11 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   }
 
   async validate(req, payload: any) {
-    const header = JSON.parse(JSON.stringify(req.headers));
-    const accessToken = header.authorization.replace('Bearer ', '');
-
-    const checktoken = await this.cacheManager.get(
+    const accessToken = req.header.authorization.replace('Bearer ', '');
+    const checkToken = await this.cacheManager.get(
       `accessToken:${accessToken}`,
     );
-    console.log(checktoken);
-    if (checktoken) {
+    if (checkToken) {
       throw new UnauthorizedException();
     }
     return {

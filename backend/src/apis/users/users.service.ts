@@ -28,7 +28,13 @@ export class UsersService {
     private readonly cacheManager: Cache,
   ) {}
 
-  findAll() {
+  async findAll({ email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('관리자 권한이 아닙니다.');
+    }
     return this.userRepository.find({});
   }
 
@@ -38,15 +44,15 @@ export class UsersService {
     });
   }
 
-  async create({ hashedPassword: password, role, ...createUserInput }) {
+  async create({ hashedPassword: password, role, access, ...createUserInput }) {
+    const { name, email, phone, ...rest } = createUserInput;
     const user = await this.userRepository.findOne({
-      where: { email: createUserInput.email },
+      where: { email },
     });
     if (user) {
       throw new ConflictException('이미 등록된 이메일입니다');
     }
 
-    const { name, email, phone, ...aaa } = createUserInput;
     // throw new HttpException('이미 등록된 이메일입니다.', HttpStatus.CONFLICT);
     // const template = await this.createTemplate({ name, email, phone });
     // await this.sendtoEmail({ email, template });
@@ -55,14 +61,8 @@ export class UsersService {
       ...createUserInput,
       password,
       role,
+      access,
     });
-
-    const newuser = await this.userRepository.findOne({
-      where: { email: createUserInput.email },
-    });
-    if (newuser.role === 'OWNER') {
-      console.log('dddddddd');
-    }
 
     return userData;
   }

@@ -40,6 +40,14 @@ export class Store {
   phone: string;
 
   @Column()
+  @Field(() => Int)
+  bigDog: number;
+
+  @Column()
+  @Field(() => Int)
+  smallDog: number;
+
+  @Column()
   @Field(() => String)
   open: string;
 
@@ -50,6 +58,10 @@ export class Store {
   @Column()
   @Field(() => String)
   address: string;
+
+  @Column()
+  @Field(() => String)
+  addressDetail: string;
 
   @Column({ default: 5, type: 'float' })
   @Field(() => Float)

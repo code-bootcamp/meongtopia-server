@@ -17,8 +17,11 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [User])
-  fetchUsers() {
-    return this.usersService.findAll();
+  fetchUsers(
+    @Context() context: any, //
+  ) {
+    const email = context.req.user.email;
+    return this.usersService.findAll({ email });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -36,10 +39,12 @@ export class UsersResolver {
   ) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'CLIENT';
+    const access = 'ALLOWED';
     return this.usersService.create({
       ...createUserInput,
       hashedPassword,
       role,
+      access,
     });
   }
 
@@ -49,10 +54,12 @@ export class UsersResolver {
   ) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'OWNER';
+    const access = 'PENDDING';
     return this.usersService.create({
       ...createUserInput,
       hashedPassword,
       role,
+      access,
     });
   }
 
@@ -62,9 +69,11 @@ export class UsersResolver {
   ) {
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'ADMIN';
+    const access = 'ALLOWED';
     return this.usersService.create({
       hashedPassword,
       role,
+      access,
       ...createUserInput,
     });
   }
