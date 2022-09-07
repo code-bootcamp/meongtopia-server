@@ -20,27 +20,23 @@ export class PaymentResolver {
     @Args({ name: 'amount', type: () => Int }) amount: number,
     @Context() context: IContext,
   ) {
-    // const user = context.req.user;
-    // // console.log(user + "\n context.user정보");
-    // //이미 결제가 된 데이터 인지 확인하기
-    // await this.paymentService.checkPayment({ impUid });
-    // //결제 정보 토큰 받아오기
-    // let getToken = await this.iamportService.getToken();
-    // //토큰 정보에 들어있는 결제 정보 가져오기
-    // let getPaymentData = await this.iamportService.getPaymentData({
-    //   impUid,
-    //   getToken,
-    // });
-    // // console.log(getToken);
-    // // console.log("=======");
-    // // console.log(getPaymentData);
-    // //생성하려는 결제정보랑 토큰에 들어있는 결제 정보랑 같은지 검증하기.
-    // await this.paymentService.validate({
-    //   impUid,
-    //   amount,
-    //   getPaymentData,
-    // });
-    // return this.paymentService.create({ impUid, amount, user });
+    const user = context.req.user;
+    //이미 결제가 된 데이터 인지 확인하기
+    await this.paymentService.checkPayment({ impUid });
+    //결제 정보 토큰 받아오기
+    const getToken = await this.iamportService.getToken();
+    //토큰 정보에 들어있는 결제 정보 가져오기
+    const getPaymentData = await this.iamportService.getPaymentData({
+      impUid,
+      getToken,
+    });
+    //생성하려는 결제정보랑 토큰에 들어있는 결제 정보랑 같은지 검증하기.
+    await this.paymentService.validate({
+      impUid,
+      amount,
+      getPaymentData,
+    });
+    return this.paymentService.create({ impUid, amount, user });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -51,20 +47,20 @@ export class PaymentResolver {
     @Args({ name: 'amount', type: () => Int }) amount: number,
     @Context() context: IContext,
   ) {
-    // const user = context.req.user;
-    // //이미 취소한 데이터인지 확인하기
-    // let payment = await this.paymentService.checkCancel({ impUid });
-    // //취소하려는 금액이 유저에 저장되어있는 cash보다 많은지 확인하기
-    // await this.paymentService.checkCash({ user, amount });
-    // //토큰 받기
-    // let access_token = await this.iamportService.getToken();
-    // //결제취소 요청하기
-    // let getCancelData = await this.iamportService.getCancelData({
-    //   access_token,
-    //   payment,
-    //   reason,
-    // });
-    // //결제취소 생성하고 해당 데이터 클라이언트에게 반환하기.
-    // return this.paymentService.cancel({ getCancelData, user });
+    const user = context.req.user;
+    //이미 취소한 데이터인지 확인하기
+    const payment = await this.paymentService.checkCancel({ impUid });
+    //취소하려는 금액이 유저에 저장되어있는 cash보다 많은지 확인하기
+    await this.paymentService.checkCash({ user, amount });
+    //토큰 받기
+    const access_token = await this.iamportService.getToken();
+    //결제취소 요청하기
+    const getCancelData = await this.iamportService.getCancelData({
+      access_token,
+      payment,
+      reason,
+    });
+    //결제취소 생성하고 해당 데이터 클라이언트에게 반환하기.
+    return this.paymentService.cancel({ getCancelData, user });
   }
 }

@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 import { StoreTag } from './entities/storeTag.entity';
 
 @Injectable()
@@ -8,20 +9,40 @@ export class StoreTagsService {
   constructor(
     @InjectRepository(StoreTag)
     private readonly storeTagRepository: Repository<StoreTag>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll() {
+  async findAll({ email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('관리자가 아닙니다.');
+    }
     return await this.storeTagRepository.find();
   }
 
-  async create({ name }) {
+  async create({ name, email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('관리자가 아닙니다.');
+    }
     const tag = await this.storeTagRepository.save({
       name,
     });
     return tag;
   }
 
-  async update({ before, after }) {
+  async update({ before, after, email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('관리자가 아닙니다.');
+    }
     const tag = await this.storeTagRepository.findOne({
       where: { name: before },
     });
@@ -34,7 +55,13 @@ export class StoreTagsService {
     });
   }
 
-  async delete({ name }) {
+  async delete({ name, email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (user.role !== 'ADMIN') {
+      throw new ConflictException('관리자가 아닙니다.');
+    }
     const result = await this.storeTagRepository.delete({
       name,
     });
