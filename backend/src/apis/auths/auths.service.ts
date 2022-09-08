@@ -30,7 +30,7 @@ export class AuthService {
     //배포
     // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com');
 
-    return res.setHeader(
+    res.setHeader(
       'Set-Cookie',
       `refreshToken=${refreshToken}; path=/; domain=.meongtopiaserver.shop; Secure; httpOnly; SameSite=None;`,
     );
