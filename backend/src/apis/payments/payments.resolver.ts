@@ -64,7 +64,10 @@ export class PaymentResolver {
     return this.paymentService.cancel({ getCancelData, user });
   }
 
-  usePoint() {
+  @Mutation(() => Boolean)
+  usePoint(
+    @Args({ name: 'amount', type: () => Int }) amount: number, //
+  ) {
     return;
   }
 

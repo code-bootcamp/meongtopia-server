@@ -16,23 +16,23 @@ export class Pet {
   @Field(() => String)
   petID: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   petImgUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   age: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   breed: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   description: string;
 

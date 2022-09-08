@@ -20,10 +20,6 @@ export class StoreImage {
   @Field(() => String)
   url: string;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
-  //, (store) => store.imgurl
   @ManyToOne(() => Store)
   @Field(() => [Store])
   store: Store[];
