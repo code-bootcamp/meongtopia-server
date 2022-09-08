@@ -1,21 +1,22 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
-// import { ImageInput } from 'src/apis/images/dto/image.input';
 
+//나중에 nullable 지우기
 @InputType()
 export class CreatePetInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   petImgUrl: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name: string;
 
-  @Field(() => Int)
+  @Min(0)
+  @Field(() => Int, { nullable: true })
   age: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   breed: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   description: string;
 }

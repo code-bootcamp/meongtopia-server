@@ -3,8 +3,8 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
-import { createStoreInput } from './dto/createStore.input';
-import { updateStoreInput } from './dto/updateStore.input';
+import { CreateStoreInput } from './dto/createStore.input';
+import { UpdateStoreInput } from './dto/updateStore.input';
 import { Store } from './entities/store.entity';
 import { StoresService } from './stores.service';
 
@@ -63,7 +63,7 @@ export class StoresResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Store)
   createStore(
-    @Args('createStoreInput') createStoreInput: createStoreInput, //
+    @Args('createStoreInput') createStoreInput: CreateStoreInput, //
     @Context() context: any,
   ) {
     const email = context.req.user.email;
@@ -73,7 +73,7 @@ export class StoresResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Store)
   updateStore(
-    @Args('updateStoreInput') updateStoreInput: updateStoreInput, //
+    @Args('updateStoreInput') updateStoreInput: UpdateStoreInput, //
     @Context() context: any,
   ) {
     const email = context.req.user.email;

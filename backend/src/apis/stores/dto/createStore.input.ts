@@ -2,51 +2,52 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 import { CreatePetInput } from 'src/apis/pets/dto/createPet.input';
 
+//나중에 nullable 지우기
 @InputType()
-export class createStoreInput {
-  @Field(() => String)
+export class CreateStoreInput {
+  @Field(() => String, { nullable: true })
   name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   description: string;
 
   @Min(0)
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   entranceFee: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   phone: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   open: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   close: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   address: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   addressDetail: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   menuImg: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   bigDog: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   smallDog: number;
 
-  @Field(() => [CreatePetInput])
-  pet: CreatePetInput[];
+  @Field(() => [CreatePetInput], { nullable: true })
+  pet?: CreatePetInput[];
 
-  @Field(() => [String])
-  storeImage: string[];
+  @Field(() => [String], { nullable: true })
+  storeImage?: string[];
 
-  @Field(() => [String])
-  storeTag: string[];
+  @Field(() => [String], { nullable: true })
+  storeTag?: string[];
 
-  @Field(() => String)
-  locationTag: string;
+  @Field(() => String, { nullable: true })
+  locationTag?: string;
 }
