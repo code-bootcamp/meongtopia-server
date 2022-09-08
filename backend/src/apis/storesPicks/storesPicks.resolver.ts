@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Query, Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { Store } from '../stores/entities/store.entity';
 import { Pick } from './entities/storePick.entity';
 import { StoresPicksService } from './storesPicks.service';
 
@@ -9,6 +10,14 @@ export class StoresPicksResolver {
   constructor(
     private readonly storesPicksService: StoresPicksService, //
   ) {}
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Store])
+  async fetchPicks(@Context() context: any) {
+    const userID = context.req.user;
+    console.log(userID, '============');
+    return await this.storesPicksService.fetchUserPicks({ userID });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)

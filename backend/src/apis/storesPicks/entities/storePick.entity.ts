@@ -17,15 +17,11 @@ export class Pick {
   @Field(() => String)
   pickID: string;
 
-  @Column({ default: false })
-  @Field(() => Boolean)
-  state: boolean;
+  @ManyToOne(() => User, { nullable: true })
+  @Field(() => User, { nullable: true })
+  user: User;
 
-  @ManyToOne(() => User)
-  @Field(() => [User])
-  user: User[];
-
-  @ManyToOne(() => Store)
-  @Field(() => [Store])
-  store: Store[];
+  @ManyToOne(() => Store, { nullable: true })
+  @Field(() => Store, { nullable: true })
+  store: Store;
 }

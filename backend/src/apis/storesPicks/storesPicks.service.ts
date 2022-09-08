@@ -16,19 +16,53 @@ export class StoresPicksService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async fetchUserPicks({ userID }) {
+    const allPicks = await this.pickRepository.find({
+      relations: ['user', 'store'],
+    });
+
+    const result = [];
+    console.log(userID, '1111111');
+    for (let i = 0; i < allPicks.length; i++) {
+      if (allPicks[i].user.userID === userID.id) {
+        result.push(
+          await this.storeRepository.findOne({
+            where: { storeID: allPicks[i].store.storeID },
+          }),
+        );
+      }
+    }
+    console.log(result);
+    return result;
+  }
+
   async toggle({ storeID, email }) {
-    const pickstore = await this.storeRepository.findOne({
+    const pickstore: any = await this.storeRepository.findOne({
       where: { storeID },
     });
     if (pickstore === null) {
       throw new ConflictException('존재하지 않는 가게입니다.');
     }
-    const myuser = await this.userRepository.findOne({ where: { email } });
-    const allPicks = await this.pickRepository.find({
+    const myuser: any = await this.userRepository.findOne({ where: { email } });
+
+    const picktrue = await this.pickRepository.findOne({
+      where: {
+        user: { userID: myuser.userID },
+        store: { storeID: pickstore.storeID },
+      },
       relations: ['user', 'store'],
     });
 
-    console.log(allPicks, '========');
+    console.log(picktrue);
+    if (picktrue) {
+      await this.pickRepository.delete({ pickID: picktrue.pickID });
+    } else {
+      await this.pickRepository.save({
+        store: pickstore,
+        user: myuser,
+      });
+    }
+
     return true;
   }
 }
