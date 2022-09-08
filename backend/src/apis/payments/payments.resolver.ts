@@ -64,11 +64,14 @@ export class PaymentResolver {
     return this.paymentService.cancel({ getCancelData, user });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  usePoint(
+  async usePoint(
     @Args({ name: 'amount', type: () => Int }) amount: number, //
+    @Context() context: IContext,
   ) {
-    return;
+    const user = context.req.user;
+    await this.paymentService.checkCash({ user, amount });
   }
 
   cancelPoint() {

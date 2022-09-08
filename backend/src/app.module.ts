@@ -39,7 +39,7 @@ import { FilesModule } from './apis/files/files.module';
       context: ({ req, res }) => ({ req, res }),
       cors: {
         credential: true,
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         allowedHeaders: [
           'Access-Control-Allow-Headers',
           'Authorization',
@@ -49,6 +49,7 @@ import { FilesModule } from './apis/files/files.module';
         ],
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
         origin: [
+          'http://localhost:3000',
           process.env.CORS_ORIGIN_DEV,
           process.env.CORS_ORIGIN_PROD,
           // process.env.CORS_ORIGIN_TEST,

@@ -53,6 +53,7 @@ export class AuthResolver {
     @Context() context: any, //
   ) {
     const header = JSON.parse(JSON.stringify(context.req.headers));
+    console.log(header);
     const refreshToken = header.cookie.replace('refreshToken=', '');
     const accessToken = header.authorization.replace('Bearer ', '');
 
