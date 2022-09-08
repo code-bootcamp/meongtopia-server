@@ -1,5 +1,3 @@
-# 가상컴퓨터에서 express를 설치. 즉, backend서버
-# 배포용
 FROM node:14
 
 WORKDIR /myfolder/
