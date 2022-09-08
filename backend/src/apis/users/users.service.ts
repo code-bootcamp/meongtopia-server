@@ -14,7 +14,7 @@ import { getToday } from 'src/commons/utils/utils';
 import { resolve } from 'path';
 import { rejects } from 'assert';
 import nodemailer from 'nodemailer';
-import * as coolsms from 'coolsms-node-sdk';
+import coolsms from 'coolsms-node-sdk';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
 import { Mutation } from '@nestjs/graphql';
@@ -213,43 +213,42 @@ export class UsersService {
   async sendTokenSMS({ phone }) {
     const isValid = this.checkValidationPhone({ phone });
     if (isValid) {
-      try {
-        const digit = await this.userRepository.findOne({
-          where: { phone: phone },
-        });
-        // if (digit) {
-        //   throw new ConflictException('이미 등록된 번호입니다.');
-        // }
-        const count = 6;
-        const token = String(Math.floor(Math.random() * 10 ** count)).padStart(
-          count,
-          '0',
-        );
-        //
-        const SMS_KEY = process.env.SMS_KEY;
-        const SMS_SECRET = process.env.SMS_SECRET;
-        const SMS_sender = process.env.SMS_SENDER;
-        const mysms = coolsms.default;
-
-        const messageService = new mysms(SMS_KEY, SMS_SECRET);
-        await messageService.sendOne({
-          to: phone,
-          from: SMS_sender,
-          text: `[${digit.name}님]안녕하세요! 요청하신 인증번호는 [${token}] 입니다.`,
-          autoTypeDetect: true,
-        });
-
-        const myToken = await this.cacheManager.get(phone);
-        if (myToken) {
-          await this.cacheManager.del(phone);
-        }
-        await this.cacheManager.set(phone, token, {
-          ttl: 180,
-        });
-        return token;
-      } catch (error) {
-        throw new UnprocessableEntityException('토큰 발급 중 에러발생');
+      // try {
+      const digit = await this.userRepository.findOne({
+        where: { phone: phone },
+      });
+      if (digit) {
+        throw new ConflictException('이미 등록된 번호입니다.');
       }
+      const count = 6;
+      const token = String(Math.floor(Math.random() * 10 ** count)).padStart(
+        count,
+        '0',
+      );
+
+      const SMS_KEY = process.env.SMS_KEY;
+      const SMS_SECRET = process.env.SMS_SECRET;
+      const SMS_SENDER = process.env.SMS_SENDER;
+
+      const messageService = new coolsms(SMS_KEY, SMS_SECRET);
+      await messageService.sendOne({
+        to: phone,
+        from: SMS_SENDER,
+        text: `안녕하세요! [ 멍토피아 ] 가입 인증번호는 [${token}] 입니다.`,
+        type: 'SMS',
+        autoTypeDetect: false,
+      });
+      const myToken = await this.cacheManager.get(phone);
+      if (myToken) {
+        await this.cacheManager.del(phone);
+      }
+      await this.cacheManager.set(phone, token, {
+        ttl: 180,
+      });
+      return token;
+      // } catch (error) {
+      //   throw new error();
+      // }
     }
   }
   checkValidationPhone({ phone }) {

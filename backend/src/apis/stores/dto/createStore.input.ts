@@ -27,7 +27,16 @@ export class createStoreInput {
   address: string;
 
   @Field(() => String)
+  addressDetail: string;
+
+  @Field(() => String)
   menuImg: string;
+
+  @Field(() => Int)
+  bigDog: number;
+
+  @Field(() => Int)
+  smallDog: number;
 
   @Field(() => [CreatePetInput])
   pet: CreatePetInput[];

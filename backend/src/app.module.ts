@@ -38,8 +38,8 @@ import { FilesModule } from './apis/files/files.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        Credential: true,
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        credential: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
         allowedHeaders: [
           'Access-Control-Allow-Headers',
           'Authorization',
@@ -47,10 +47,11 @@ import { FilesModule } from './apis/files/files.module';
           'Content-Type',
           'Accept',
         ],
+        exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
         origin: [
           process.env.CORS_ORIGIN_DEV,
-          // process.env.CORS_ORIGIN_TEST,
           process.env.CORS_ORIGIN_PROD,
+          // process.env.CORS_ORIGIN_TEST,
         ],
       },
     }),

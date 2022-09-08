@@ -63,4 +63,12 @@ export class PaymentResolver {
     //결제취소 생성하고 해당 데이터 클라이언트에게 반환하기.
     return this.paymentService.cancel({ getCancelData, user });
   }
+
+  usePoint() {
+    return;
+  }
+
+  cancelPoint() {
+    return;
+  }
 }

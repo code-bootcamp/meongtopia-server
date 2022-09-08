@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UsersService } from '../users/users.service';
 import { AuthService } from './auths.service';
 import { Request, Response } from 'express';
 import { IOAuthUser } from 'src/commons/type/context';
@@ -8,8 +7,7 @@ import { IOAuthUser } from 'src/commons/type/context';
 @Controller()
 export class AuthController {
   constructor(
-    private readonly usersService: UsersService, //
-    private readonly authService: AuthService,
+    private readonly authService: AuthService, //
   ) {}
 
   @Get('/login/google')
@@ -18,7 +16,7 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    return this.authService.setRefreshToken({ req, res });
+    return this.authService.socialLogin({ req, res });
   }
 
   @Get('/login/kakao')
@@ -27,7 +25,7 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    return this.authService.setRefreshToken({ req, res });
+    return this.authService.socialLogin({ req, res });
   }
 
   @Get('/login/naver')
@@ -36,6 +34,6 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    return this.authService.setRefreshToken({ req, res });
+    return this.authService.socialLogin({ req, res });
   }
 }
