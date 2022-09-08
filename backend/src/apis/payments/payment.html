@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>결제하기</title>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/axios/dist/axios.min.js"
+    ></script>
+    <script>
+      function mypayment() {
+        const myAmount = Number(document.getElementById("amount").value);
+
+        const IMP = window.IMP; // 생략 가능
+        IMP.init("imp04533111"); // Example: imp00000000
+        IMP.request_pay(
+          {
+            // param
+            pg: "nice",
+            pay_method: "card",
+            name: "키보드",
+            amount: myAmount,
+            buyer_email: "aaa@gmail.com",
+            buyer_name: "철수",
+            buyer_tel: "010-1111-2222",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181",
+            m_redirect_url: "", // 모바일 결제후 리다이렉트될 주소!!
+          },
+          async (rsp) => {
+            // callback
+            if (rsp.success) {
+              // 결제 성공시
+              console.log(rsp);
+
+              const data = await axios.post(
+                "http://localhost:3000/graphql",
+                {
+                  query: `
+                      mutation {
+                        createPayment(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}) {
+                          payment_id
+                        }
+                      }
+                    `,
+                },
+                {
+                  headers: {
+                    authorization:
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJiQG5hdmVyLmNvbSIsInN1YiI6ImVkMTMxOTQ0LTZlYjMtNDYxZC05ZGQ2LTE1MWYwY2ZmMzYzZiIsImlhdCI6MTY2MjU0NDMxOCwiZXhwIjoxNjYyNTQ3OTE4fQ.lyl7oLwuxGivo45MC9vgB8Lod96oIKCpQzTwlOxdekQ",
+                  },
+                }
+              );
+
+              console.log(data);
+              alert("결제 성공했습니다.");
+            } else {
+              // 결제 실패시
+              alert("결제 실패했습니다.");
+            }
+          }
+        );
+      }
+    </script>
+  </head>
+  <body>
+    결제할 금액: <input type="text" id="amount" />
+    <button onclick="mypayment()">결제하기</button>
+  </body>
+</html>
