@@ -26,12 +26,13 @@ export class AuthService {
     res.setHeader(
       'Access-Control-Allow-Headers',
       'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-    ); //배포
+    );
+    //배포
     // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com');
 
     return res.setHeader(
       'Set-Cookie',
-      `refreshToken = ${refreshToken}; path=/; domain=.meongtopiaserver.shop; Secure; httpOnly; SameSite=None;`,
+      `refreshToken=${refreshToken}; path=/; domain=.meongtopiaserver.shop; Secure; httpOnly; SameSite=None;`,
     );
   }
 

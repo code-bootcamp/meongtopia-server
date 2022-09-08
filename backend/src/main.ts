@@ -11,9 +11,18 @@ async function bootstrap() {
   app.use(graphqlUploadExpress());
   app.enableCors({
     origin: [
+      'http://localhost:3000',
       process.env.CORS_ORIGIN_DEV,
       process.env.CORS_ORIGIN_PROD,
       // process.env.CORS_ORIGIN_TEST,
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: [
+      'Access-Control-Allow-Headers',
+      'Authorization',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
     ],
     credentials: true,
   });

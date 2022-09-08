@@ -129,7 +129,7 @@ export class PaymentService {
     });
     //2. 취소하려는 금액과 캐쥐 잔액 비교하기.
     if (user.point < amount) {
-      throw new UnprocessableEntityException('취소가능한 포인트가 부족합니다.');
+      throw new UnprocessableEntityException('포인트가 부족합니다.');
     }
   }
 

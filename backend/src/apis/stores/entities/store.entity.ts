@@ -23,51 +23,51 @@ export class Store {
   @Field(() => String)
   storeID: string;
 
-  @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
+  @Column({ type: 'varchar', nullable: false })
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   entranceFee: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   phone: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   bigDog: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   smallDog: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   open: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   close: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   addressDetail: string;
 
-  @Column({ default: 5, type: 'float' })
+  @Column({ default: 5, type: 'float', nullable: true })
   @Field(() => Float)
   avgRating: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   menuImg: string;
 
