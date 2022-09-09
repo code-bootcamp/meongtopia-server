@@ -141,4 +141,11 @@ export class UsersResolver {
   ) {
     return await this.usersService.matchToken({ phone, token });
   }
+
+  @Mutation(() => Boolean)
+  checkNickname(
+    @Args('nickname') nickname: string, //
+  ) {
+    return this.usersService.checkNickname({ nickname });
+  }
 }

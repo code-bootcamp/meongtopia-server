@@ -260,6 +260,13 @@ export class UsersService {
     }
   }
 
+  async checkNickname({ nickname }) {
+    const user = await this.userRepository.find({
+      where: { nickname },
+    });
+    return user.length !== 0 ? true : false;
+  }
+
   async matchToken({ phone, token }) {
     const myToken = await this.cacheManager.get(phone);
 
