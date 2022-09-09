@@ -16,10 +16,12 @@ import { ReviewesResponsesModule } from './apis/reviewesResponses/reviewesRespon
 import { PetsModule } from './apis/pets/pets.module';
 import { AuthModule } from './apis/auths/auths.module';
 import { FilesModule } from './apis/files/files.module';
+import { ReservationsModule } from './apis/reservations/reservations.module';
 
 @Module({
   imports: [
     PetsModule,
+    ReservationsModule,
     ReviewesModule,
     ReviewesResponsesModule,
     StoresModule,
