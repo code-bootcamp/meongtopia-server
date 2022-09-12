@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pet } from '../pets/entities/pet.entity';
 import { Reservation } from '../reservations/entities/reservation.entity';
-import { StoreImage } from '../storesImgs/entities/storeImg.entity';
+import { StoreImg } from '../storesImgs/entities/storeImg.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
 import { StrLocationTag } from '../strLocationsTags/entities/strLocationTag.entity';
 import { User } from '../users/entities/user.entity';
@@ -22,8 +22,8 @@ export class StoresService {
     private readonly storeTagsRepository: Repository<StoreTag>,
     @InjectRepository(Pet)
     private readonly petRepository: Repository<Pet>,
-    @InjectRepository(StoreImage)
-    private readonly storeImageRepository: Repository<StoreImage>,
+    @InjectRepository(StoreImg)
+    private readonly storeImageRepository: Repository<StoreImg>,
     @InjectRepository(StrLocationTag)
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
   ) {}
@@ -31,8 +31,9 @@ export class StoresService {
   async findOne({ storeID }) {
     const result = await this.storesRepository.findOne({
       where: { storeID },
-      relations: ['locationTag', 'user', 'storeTag', 'storeImag', 'pet'],
+      relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
     });
+    console.log(result);
     return result;
   }
 

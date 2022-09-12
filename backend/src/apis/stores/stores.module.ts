@@ -3,7 +3,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Pet } from '../pets/entities/pet.entity';
 import { Reservation } from '../reservations/entities/reservation.entity';
-import { StoreImage } from '../storesImgs/entities/storeImg.entity';
+import { StoreImg } from '../storesImgs/entities/storeImg.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
 import { StrLocationTag } from '../strLocationsTags/entities/strLocationTag.entity';
 import { User } from '../users/entities/user.entity';
@@ -19,7 +19,7 @@ import { StoresService } from './stores.service';
       Reservation,
       StoreTag,
       Pet,
-      StoreImage,
+      StoreImg,
       StrLocationTag,
     ]),
     ElasticsearchModule.register({
