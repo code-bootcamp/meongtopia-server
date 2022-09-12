@@ -1,16 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Store } from 'src/apis/stores/entities/store.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  // OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class StoreImage {
+export class StoreImg {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   storeImgID: string;
@@ -19,7 +13,7 @@ export class StoreImage {
   @Field(() => String)
   url: string;
 
-  @ManyToOne(() => Store, (store) => store.storeImag)
-  @Field(() => [Store])
-  store: Store[];
+  @ManyToOne(() => Store, (store) => store.storeImg)
+  @Field(() => Store)
+  store: Store;
 }
