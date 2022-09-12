@@ -42,7 +42,7 @@ export class Pet {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Store, (store) => store.pet)
   @Field(() => Store)
   store: Store;
 }

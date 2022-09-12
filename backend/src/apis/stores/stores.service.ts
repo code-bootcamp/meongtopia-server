@@ -29,9 +29,11 @@ export class StoresService {
   ) {}
 
   async findOne({ storeID }) {
-    return await this.storesRepository.findOne({
+    const result = await this.storesRepository.findOne({
       where: { storeID },
+      relations: ['locationTag', 'user', 'storeTag', 'storeImag', 'pet'],
     });
+    return result;
   }
 
   async findTag({ name }) {
@@ -94,7 +96,6 @@ export class StoresService {
 
     //펫 이미지 테이블에 저장
     for (let i = 0; i < pet.length; i++) {
-      console.log(pet[i]);
       await this.petRepository.save({
         ...pet[i],
         store: storeData,

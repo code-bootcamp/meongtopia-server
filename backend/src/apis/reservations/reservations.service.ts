@@ -68,6 +68,21 @@ export class ReservationsService {
     return result.affected ? true : false;
   }
 
+  async checkReservation({ email, storeID }) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    const reservation = await this.reservationsRepository.findOne({
+      where: {
+        store: { storeID },
+        user: { userID: user.userID },
+      },
+    });
+    if (!reservation) {
+      throw new UnprocessableEntityException('예약 내역이 존재하지 않습니다.');
+    }
+  }
   async checkUserPoint({ email, createReservationInput }) {
     const user = await this.usersRepository.findOne({
       where: { email },

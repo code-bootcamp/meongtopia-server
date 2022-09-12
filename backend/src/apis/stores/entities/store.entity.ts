@@ -1,4 +1,6 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Pet } from 'src/apis/pets/entities/pet.entity';
+import { StoreImage } from 'src/apis/storesImgs/entities/storeImg.entity';
 import { StoreTag } from 'src/apis/storesTags/entities/storeTag.entity';
 import { StrLocationTag } from 'src/apis/strLocationsTags/entities/strLocationTag.entity';
 import { User } from 'src/apis/users/entities/user.entity';
@@ -11,6 +13,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   // OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -89,6 +92,15 @@ export class Store {
   // @OneToOne(() => User)
   // @Field(() => User)
   // user: User;
+
+  @OneToMany(() => StoreImage, (storeImag) => storeImag.store)
+  @Field(() => [StoreImage])
+  storeImag: StoreImage[];
+
+  @OneToMany(() => Pet, (pet) => pet.store)
+  @Field(() => [Pet])
+  pet: Pet[];
+
   //테스트용
   @ManyToOne(() => User)
   @Field(() => User)

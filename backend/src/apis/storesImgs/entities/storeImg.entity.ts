@@ -2,7 +2,6 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
-  DeleteDateColumn,
   Entity,
   ManyToOne,
   // OneToOne,
@@ -20,7 +19,7 @@ export class StoreImage {
   @Field(() => String)
   url: string;
 
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Store, (store) => store.storeImag)
   @Field(() => [Store])
   store: Store[];
 }
