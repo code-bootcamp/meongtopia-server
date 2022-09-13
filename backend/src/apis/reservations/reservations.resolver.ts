@@ -41,13 +41,14 @@ export class ReservationsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Reservation)
+  @Mutation(() => Boolean)
   async cancelReservation(
     @Args('storeID') storeID: string, //
+    @Args('date') date: string,
     @Context() context: any,
   ) {
     const email = context.req.user.email;
-    await this.reservationsService.checkReservation({ storeID, email });
-    return this.reservationsService.cancel({ email, storeID });
+    await this.reservationsService.checkReservation({ storeID, email, date });
+    return this.reservationsService.cancel({ email, storeID, date });
   }
 }

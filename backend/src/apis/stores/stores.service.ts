@@ -68,8 +68,7 @@ export class StoresService {
     //   throw new ConflictException('아직 승인되지 않은 유저입니다.');
     // }
 
-    const { pet, storeImage, storeTag, locationTag, ...store } =
-      createStoreInput;
+    const { pet, storeImg, storeTag, locationTag, ...store } = createStoreInput;
 
     //다대다 태그 저장
     const tag = [];
@@ -105,12 +104,13 @@ export class StoresService {
     }
 
     //이미지는 store 저장하고 저장
-    storeImage.map(async (url: string) => {
+    for (let i = 0; i < storeImg.length; i++) {
+      const url = storeImg[i];
       await this.storeImageRepository.save({
         url,
         store: storeData,
       });
-    });
+    }
 
     return storeData;
     // } catch (error) {

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Income } from '../incomes/entities/incomes.entity';
 import { Store } from '../stores/entities/store.entity';
 import { User } from '../users/entities/user.entity';
 import { Reservation } from './entities/reservation.entity';
@@ -12,6 +13,7 @@ import { ReservationsService } from './reservations.service';
       Reservation, //
       User,
       Store,
+      Income,
     ]),
   ],
   providers: [

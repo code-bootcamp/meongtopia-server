@@ -6,3 +6,9 @@ export function getToday() {
 
   return `${year}-${month}-${day}`;
 }
+
+export function getDate() {
+  const date = new Date();
+  const day = date.getDate();
+  return day;
+}
