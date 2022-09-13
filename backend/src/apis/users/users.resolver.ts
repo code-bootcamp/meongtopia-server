@@ -1,4 +1,9 @@
-import { UseGuards } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  UnprocessableEntityException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { User } from './entities/user.entity';
@@ -7,12 +12,15 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CreateUserInput } from './dto/createUser.input';
-import { getToday } from 'src/commons/utils/utils';
+
+import { Cache } from 'cache-manager';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -111,13 +119,17 @@ export class UsersResolver {
     return await this.usersService.deleteprofile({ email });
   }
 
-  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
   async updateUserPwd(
     @Args('email') email: string,
+    @Args('phone') phone: string,
     @Args('updateUserPwdInput') updateUserPwdInput: string,
   ) {
-    console.log(email);
+    const myToken = await this.cacheManager.get(phone);
+    if (myToken!) {
+      throw new UnprocessableEntityException('인증을 하세요');
+    }
+
     const hashedPassword = await bcrypt.hash(updateUserPwdInput, 10.2);
     return await this.usersService.updatePwd({ email, hashedPassword });
   }
@@ -132,6 +144,11 @@ export class UsersResolver {
   @Mutation(() => String)
   async getToken(@Args('phone') phone: string) {
     return await this.usersService.sendTokenSMS({ phone });
+  }
+
+  @Mutation(() => String)
+  async getTokenEmail(@Args('email') email: string) {
+    return await this.usersService.sendTokenEmail({ email });
   }
 
   @Mutation(() => String)

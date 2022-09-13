@@ -37,11 +37,11 @@ export class User {
   @Field(() => String)
   userID: string;
 
-  @Column({ type: 'varchar', length: 20, unique: true })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   @Field(() => String)
-  name: string;
+  name?: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   @Field(() => String)
   nickname?: string;
 
@@ -61,17 +61,17 @@ export class User {
   @Field(() => Int)
   point: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: '' })
   @Field(() => String)
   storeName?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: '' })
   @Field(() => String)
   businessLicenseImg?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: '' })
   @Field(() => String)
-  profileImgUrl: string;
+  profileImgUrl?: string;
 
   @Column({ type: 'enum', enum: USER_ROLE_ENUM })
   @Field(() => USER_ROLE_ENUM)

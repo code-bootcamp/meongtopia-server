@@ -19,6 +19,9 @@ import axios from 'axios';
 import { Cache } from 'cache-manager';
 import { Mutation } from '@nestjs/graphql';
 
+import { MailerService } from '@nestjs-modules/mailer';
+import { template } from 'handlebars';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -26,6 +29,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+    private readonly mailerService: MailerService,
   ) {}
 
   async findAll({ email }) {
@@ -55,7 +59,7 @@ export class UsersService {
 
     // throw new HttpException('이미 등록된 이메일입니다.', HttpStatus.CONFLICT);
     // const template = await this.createTemplate({ name, email, phone });
-    // await this.sendtoEmail({ email, template });
+    await this.sendEmail({ email, name });
 
     const userData = await this.userRepository.save({
       ...createUserInput,
@@ -86,26 +90,6 @@ export class UsersService {
   //   </html>
   //   `;
   //   return mytemplate;
-  // }
-
-  // async sendtoEmail({ email, template }) {
-  //   const EMAIL_USER = email;
-  //   const EMAIL_PASS = process.env.EMAIL_PASS;
-  //   const EMAIL_SENDER = process.env.EMAIL_SENDER;
-
-  //   const transporter = nodemailer.createTransport({
-  //     service: 'gmail',
-  //     auth: {
-  //       user: EMAIL_USER,
-  //       pass: EMAIL_PASS,
-  //     },
-  //   });
-  //   const response = await transporter.sendMail({
-  //     from: EMAIL_SENDER,
-  //     to: email,
-  //     subject: '가입을 축하합니다!!!',
-  //     html: template,
-  //   });
   // }
 
   async update({ email, updateUserInput }) {
@@ -251,6 +235,63 @@ export class UsersService {
       // }
     }
   }
+
+  async sendTokenEmail({ email }) {
+    const EMAIL_USER = process.env.EMAIL_USER;
+    const count = 6;
+    const token = String(Math.floor(Math.random() * 10 ** count)).padStart(
+      count,
+      '0',
+    );
+    const aaa = await this.mailerService
+      .sendMail({
+        to: email,
+        from: EMAIL_USER,
+        subject: '인증 번호입니다.',
+        html: '6자리 인증 코드 : ' + `<b> ${token}</b>`, // The `.pug` or `.hbs` extension is appended automatically.
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(aaa);
+    return token;
+  }
+
+  async sendEmail({ email, name }) {
+    const EMAIL_USER = process.env.EMAIL_USER;
+
+    const mytemplate = `
+    <html>
+        <body>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 500px;">
+                <img class="LogoImg" src="https://cdn.discordapp.com/attachments/1012196150989828097/1019146948638425098/Group_57.png" />
+                <h1>${name}님 가입을 환영합니다!</h1>
+                <hr />
+                <div style="color: black;">이름: ${name}</div>
+                <div>email: ${email}</div>
+                <div>가입일: ${getToday()}</div>
+            </div>
+            </div>
+        </body>
+    </html>
+    `;
+
+    const aaa = await this.mailerService
+      .sendMail({
+        to: email,
+        from: EMAIL_USER,
+        subject: '멍토피아 가입을 환영합니다.',
+        html: mytemplate,
+        // html: `<b> ${name}님 가입을 환영합니다.</b>`, // The `.pug` or `.hbs` extension is appended automatically.
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(aaa);
+    return true;
+  }
+
   checkValidationPhone({ phone }) {
     if (phone.length !== 10 && phone.length !== 11) {
       console.log('에러 발생!!! 핸드폰 번호를 제대로 입력해 주세요!!!');
