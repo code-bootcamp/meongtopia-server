@@ -43,7 +43,7 @@ export class CreateStoreInput {
   pet?: CreatePetInput[];
 
   @Field(() => [String], { nullable: true })
-  storeImage?: string[];
+  storeImg?: string[];
 
   @Field(() => [String], { nullable: true })
   storeTag?: string[];

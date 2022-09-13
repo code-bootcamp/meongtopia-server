@@ -1,30 +1,35 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Payment } from 'src/apis/payments/entities/payment.entity';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
-  CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class Income {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   @Field()
   incomeID: string;
 
   @Column()
   @Field(() => Int)
-  amount: number;
+  date: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ default: 0 })
+  @Field(() => Int)
+  paymentNum: number;
+
+  @Column({ default: 0 })
+  @Field(() => Int)
+  cancelNum: number;
+
+  @Column()
+  @Field(() => Int)
+  totalCash: number;
 
   @DeleteDateColumn()
   deletedAt: Date;
@@ -32,9 +37,4 @@ export class Income {
   @ManyToOne(() => Store)
   @Field(() => Store)
   store: Store;
-
-  @JoinColumn()
-  @OneToOne(() => Payment)
-  @Field(() => Payment)
-  payment: Payment;
 }
