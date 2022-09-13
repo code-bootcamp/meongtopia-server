@@ -21,11 +21,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/cli": "^9.0.0",
     "@elastic/elasticsearch": "^8.2.1",
     "@google-cloud/storage": "^6.3.0",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/apollo": "^10.0.17",
+    "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -45,6 +45,7 @@
     "coolsms-node-sdk": "^2.0.1",
     "graphql": "^16.5.0",
     "graphql-upload": "^13.0.0",
+    "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.8",
@@ -53,6 +54,7 @@
     "passport-jwt": "^4.0.0",
     "passport-kakao": "^1.0.1",
     "passport-naver": "^1.0.6",
+    "pug": "^3.0.2",
     "redis": "^4.2.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

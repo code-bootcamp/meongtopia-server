@@ -17,6 +17,9 @@ import { PetsModule } from './apis/pets/pets.module';
 import { AuthModule } from './apis/auths/auths.module';
 import { FilesModule } from './apis/files/files.module';
 import { ReservationsModule } from './apis/reservations/reservations.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { PaymentModule } from './apis/payments/payments.module';
 
 @Module({
   imports: [
@@ -32,9 +35,32 @@ import { ReservationsModule } from './apis/reservations/reservations.module';
     UsersModule,
     AuthModule,
     FilesModule,
+    PaymentModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: {
+          service: 'Gmail',
+          host: process.env.DATABASE_HOST,
+          port: Number(process.env.DATABASE_PORT),
+          secure: false, // upgrade later with STARTTLS
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+          template: {
+            dir: process.cwd() + '/templates/',
+            adapter: new HandlebarsAdapter(), // or new PugAdapter()
+            options: {
+              strict: true,
+            },
+          },
+        },
+      }),
+    }),
+
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
