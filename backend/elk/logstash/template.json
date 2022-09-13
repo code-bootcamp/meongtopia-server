@@ -22,32 +22,14 @@
   },
   "mappings": {
     "properties": {
-      "title": {
+      "name": {
         "type": "text",
         "analyzer": "my_ngram_analyzer",
         "fields": {
           "keyword": { "type": "keyword" }
         }
       },
-      "contents": {
-        "type": "text",
-        "analyzer": "my_ngram_analyzer",
-        "fields": {
-          "keyword": { "type": "keyword" }
-        }
-      },
-      "writer": {
-        "type": "text",
-        "analyzer": "my_ngram_analyzer",
-        "fields": {
-          "keyword": { "type": "keyword" }
-        }
-      },
-      "tag": { "type": "text" },
-      "name": { "type": "text" },
-      "hit": { "type": "long" },
-      "like_count": { "type": "short" },
-      "post_id": { "type": "keyword" }
+      "storeID": { "type": "keyword" }
     }
   }
 }

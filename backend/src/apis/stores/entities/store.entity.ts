@@ -67,7 +67,7 @@ export class Store {
   @Field(() => String)
   addressDetail: string;
 
-  @Column({ default: 5, type: 'float', nullable: true })
+  @Column({ default: 5.0, type: 'float', nullable: true })
   @Field(() => Float)
   avgRating: number;
 

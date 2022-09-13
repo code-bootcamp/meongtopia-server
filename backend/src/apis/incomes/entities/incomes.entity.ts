@@ -27,7 +27,7 @@ export class Income {
   @Field(() => Int)
   cancelNum: number;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   totalCash: number;
 

@@ -1,7 +1,7 @@
 import { Field, Float, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class createReviewInput {
+export class CreateReviewInput {
   @Field(() => Float)
   rating: number;
 

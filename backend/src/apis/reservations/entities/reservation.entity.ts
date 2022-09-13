@@ -21,6 +21,10 @@ export class Reservation {
   @Field(() => Int)
   members: number;
 
+  @Column({ nullable: true, default: 0 })
+  @Field(() => Int)
+  pets: number;
+
   @Column({ nullable: true })
   @Field(() => Int)
   amount: number;
