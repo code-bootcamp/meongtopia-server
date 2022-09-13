@@ -18,7 +18,7 @@ export class StoresResolver {
   ) {}
 
   @Query(() => [Store])
-  async fetchStores(
+  async searchStores(
     @Args({ name: 'search', nullable: true }) search: string, //
   ) {
     // 상품검색,
@@ -32,6 +32,7 @@ export class StoresResolver {
         term: { name: search },
       },
     });
+    console.log(storeES);
     const searchData = storeES.hits.hits.map((row) => {
       console.log(row);
       return 'storeES console 찍어보고 알아서 넣기';
@@ -39,6 +40,13 @@ export class StoresResolver {
 
     await this.cacheManager.set(`store:${search}`, searchData, { ttl: 30 });
     return searchData;
+  }
+
+  @Query(() => [Store])
+  fetchStores(
+    @Args({ name: 'page', defaultValue: 1, nullable: true }) page: number, //
+  ) {
+    return this.storesService.find({ page });
   }
 
   @Query(() => Store)

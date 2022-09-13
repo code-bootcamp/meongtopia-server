@@ -7,4 +7,7 @@ export class CreateReservationInput {
 
   @Field(() => Int, { nullable: true })
   amount: number;
+
+  @Field(() => Int, { nullable: true })
+  pets: number;
 }

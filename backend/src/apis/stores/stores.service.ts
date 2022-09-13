@@ -28,12 +28,21 @@ export class StoresService {
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
   ) {}
 
+  async find({ page }) {
+    const result = await this.storesRepository.find({
+      relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
+    });
+    console.log(result.length);
+    const start = (page - 1) * 10;
+    const end = page * 10 - 1;
+    return result.splice(start, end);
+  }
+
   async findOne({ storeID }) {
     const result = await this.storesRepository.findOne({
       where: { storeID },
       relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
     });
-    console.log(result);
     return result;
   }
 
@@ -119,7 +128,6 @@ export class StoresService {
   }
 
   async update({ email, updateStoreInput }) {
-    console.log(updateStoreInput);
     const user = await this.usersRepository.findOne({
       where: { email },
     });
@@ -148,7 +156,6 @@ export class StoresService {
     //   const a = await this.petRepository.find({
     //     where: { store: { storeID: store.storeID } },
     //   });
-    //   console.log(a);
     // }
 
     const newStore = this.storesRepository.save({
