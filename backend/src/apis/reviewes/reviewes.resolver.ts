@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CreateReviewInput } from './dto/createReview.input';
 import { UpdateReviewInput } from './dto/updateReview.input';
@@ -11,6 +11,12 @@ export class ReviewesResolver {
   constructor(
     private readonly reviewesService: ReviewesService, //
   ) {}
+  @Query(() => Int)
+  ReviewCount(
+    @Args('storeID') storeID: string, //
+  ) {
+    return this.reviewesService.count({ storeID });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Review])

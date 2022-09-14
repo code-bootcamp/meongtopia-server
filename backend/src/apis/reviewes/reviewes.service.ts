@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Review } from './entities/review.entity';
 import { Store } from '../stores/entities/store.entity';
+import { Reservation } from '../reservations/entities/reservation.entity';
 @Injectable()
 export class ReviewesService {
   constructor(
@@ -13,6 +14,8 @@ export class ReviewesService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Store)
     private readonly storeRepository: Repository<Store>,
+    @InjectRepository(Reservation)
+    private readonly reservationRepository: Repository<Reservation>,
   ) {}
 
   async find({ email }) {
@@ -26,7 +29,7 @@ export class ReviewesService {
   }
 
   async create({ createReviewInput, email, storeID }) {
-    const { content, rating } = createReviewInput;
+    const { contents, rating } = createReviewInput;
     const user: any = await this.userRepository.findOne({
       where: { email },
     });
@@ -38,6 +41,11 @@ export class ReviewesService {
     if (!store) {
       throw new ConflictException('해당 가게 정보가 없습니다.');
     }
+
+    const isRes = await this.checkReservation({ user, store });
+    if (!isRes) {
+      throw new ConflictException('예약 내역이 존재하지 않습니다.');
+    }
     //평균 평점 변경하기
     // const avgRating = (store.avgRating + rating) / 2;
     const avgRating = Math.round(((store.avgRating + rating) / 2) * 100) / 100;
@@ -48,7 +56,7 @@ export class ReviewesService {
     });
 
     const review = await this.reviewRepository.save({
-      content,
+      contents,
       rating,
       user,
       store: newStore,
@@ -89,5 +97,27 @@ export class ReviewesService {
       user: { userID: user.userID },
     });
     return result.affected ? true : false;
+  }
+
+  async checkReservation({ user, store }) {
+    const reservation = await this.reservationRepository.findOne({
+      where: {
+        user: { userID: user.userID },
+        store: { storeID: store.storeID },
+      },
+    });
+    return reservation === null ? false : true;
+  }
+  async count({ storeID }) {
+    const reviews = await this.reviewRepository.find({
+      where: {
+        store: { storeID },
+      },
+    });
+    let count = 0;
+    if (reviews) {
+      count = reviews.length;
+    }
+    return count;
   }
 }

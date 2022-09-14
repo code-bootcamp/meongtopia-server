@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pet } from '../pets/entities/pet.entity';
-import { Reservation } from '../reservations/entities/reservation.entity';
+import { Review } from '../reviewes/entities/review.entity';
 import { StoreImg } from '../storesImgs/entities/storeImg.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
 import { StrLocationTag } from '../strLocationsTags/entities/strLocationTag.entity';
@@ -16,8 +16,8 @@ export class StoresService {
     private readonly storesRepository: Repository<Store>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    @InjectRepository(Reservation)
-    private readonly reservationsRepository: Repository<Reservation>,
+    @InjectRepository(Review)
+    private readonly reviewRepository: Repository<Review>,
     @InjectRepository(StoreTag)
     private readonly storeTagsRepository: Repository<StoreTag>,
     @InjectRepository(Pet)
@@ -28,14 +28,14 @@ export class StoresService {
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
   ) {}
 
-  async find({ page }) {
+  async find({ page, order }) {
     const result = await this.storesRepository.find({
       relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
+      skip: (page - 1) * 10,
+      take: 10,
+      order: { createdAt: order },
     });
-    console.log(result.length);
-    const start = (page - 1) * 10;
-    const end = page * 10 - 1;
-    return result.splice(start, end);
+    return result;
   }
 
   async findOne({ storeID }) {
@@ -70,12 +70,7 @@ export class StoresService {
     // try {
     //유저 정보 꺼내오기
     const user = await this.usersRepository.findOne({ where: { email } });
-    if (user.role !== 'OWNER') {
-      throw new ConflictException('해당 권한이 존재하지 않습니다.');
-    }
-    // if ((user.access = 'PENDDING')) {
-    //   throw new ConflictException('아직 승인되지 않은 유저입니다.');
-    // }
+    // this.checkAccess({ user });
 
     const { pet, storeImg, storeTag, locationTag, ...store } = createStoreInput;
 
@@ -180,5 +175,14 @@ export class StoresService {
     );
 
     return result.affected ? true : false;
+  }
+
+  checkAccess({ user }) {
+    if (user.role !== 'OWNER') {
+      throw new ConflictException('해당 권한이 존재하지 않습니다.');
+    }
+    if ((user.access = 'PENDDING')) {
+      throw new ConflictException('아직 승인되지 않은 사용장입니다.');
+    }
   }
 }

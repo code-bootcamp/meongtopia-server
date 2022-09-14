@@ -28,16 +28,20 @@ export class StoresResolver {
     if (storeCache) return storeCache;
 
     const storeES = await this.elasticsearchService.search({
+      index: 'myproduct8',
       query: {
         term: { name: search },
       },
     });
-    console.log(storeES);
-    const searchData = storeES.hits.hits.map((row) => {
-      console.log(row);
-      return 'storeES console 찍어보고 알아서 넣기';
-    });
-
+    const searchData = storeES.hits.hits;
+    // const searchData = searchRowData._source;
+    // console.log(storeES.hits.hits);
+    // const searchData = storeES.hits.hits.map(async (row) => {
+    //   const aaa = row;
+    //   console.log(aaa);
+    //   return 'storeES console 찍어보고 알아서 넣기';
+    // });
+    console.log(searchData);
     await this.cacheManager.set(`store:${search}`, searchData, { ttl: 30 });
     return searchData;
   }
@@ -45,8 +49,10 @@ export class StoresResolver {
   @Query(() => [Store])
   fetchStores(
     @Args({ name: 'page', defaultValue: 1, nullable: true }) page: number, //
+    @Args({ name: 'order', defaultValue: 'ASC', nullable: true }) order: string,
   ) {
-    return this.storesService.find({ page });
+    //ASC: 오름차순, DESC: 내림차순
+    return this.storesService.find({ page, order });
   }
 
   @Query(() => Store)

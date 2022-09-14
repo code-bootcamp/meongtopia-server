@@ -1,8 +1,10 @@
 {
   "template": "post-*",
   "index_patterns": ["*"],
-  "order": "1",
   "settings": {
+    "index": {
+      "max_ngram_diff": "20"
+    },
     "refresh_interval": "5s",
     "analysis": {
       "analyzer": {
@@ -17,19 +19,14 @@
           "max_gram": "10"
         }
       }
-    },
-    "max_ngram_diff": "20"
+    }
   },
   "mappings": {
     "properties": {
       "name": {
         "type": "text",
-        "analyzer": "my_ngram_analyzer",
-        "fields": {
-          "keyword": { "type": "keyword" }
-        }
-      },
-      "storeID": { "type": "keyword" }
+        "analyzer": "my_ngram_analyzer"
+      }
     }
   }
 }
