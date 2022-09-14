@@ -37,7 +37,6 @@ export class StoresService {
     });
     return result;
   }
-
   async findOne({ storeID }) {
     const result = await this.storesRepository.findOne({
       where: { storeID },
@@ -66,6 +65,14 @@ export class StoresService {
     return stores;
   }
 
+  async findPickRank({ order }) {
+    const stores = await this.storesRepository.find({
+      relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
+      take: 3,
+      order: { pickCount: order },
+    });
+    return stores;
+  }
   async create({ email, createStoreInput }) {
     // try {
     //유저 정보 꺼내오기

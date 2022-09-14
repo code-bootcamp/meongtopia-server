@@ -71,6 +71,10 @@ export class Store {
   @Field(() => Float)
   avgRating: number;
 
+  @Column({ default: 0 })
+  @Field(() => Int)
+  pickCount: number;
+
   @Column({ nullable: true })
   @Field(() => String)
   menuImg: string;
