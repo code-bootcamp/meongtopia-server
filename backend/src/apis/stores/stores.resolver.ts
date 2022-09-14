@@ -21,8 +21,6 @@ export class StoresResolver {
   async searchStores(
     @Args({ name: 'search', nullable: true }) search: string, //
   ) {
-    // 상품검색,
-    //redis에 먼저 들려서 이전에 다른 사용자가 이미 검색한 결과가 있다면, redis에서 먼저가져오기
     //가게 이름으로 검색
     const storeCache = await this.cacheManager.get(`store:${search}`);
     if (storeCache) return storeCache;
@@ -33,17 +31,22 @@ export class StoresResolver {
         term: { name: search },
       },
     });
-    const searchData = storeES.hits.hits;
-    // const searchData = searchRowData._source;
-    // console.log(storeES.hits.hits);
-    // const searchData = storeES.hits.hits.map(async (row) => {
-    //   const aaa = row;
-    //   console.log(aaa);
-    //   return 'storeES console 찍어보고 알아서 넣기';
-    // });
-    console.log(searchData);
+    const searchData = storeES.hits.hits.map(async (row) => {
+      const storeID = row._id;
+      return await this.storesService.findOne({ storeID });
+      // console.log(result);
+      // return result;
+    });
     await this.cacheManager.set(`store:${search}`, searchData, { ttl: 30 });
     return searchData;
+  }
+
+  @Query(() => [Store])
+  fetchPickRank(
+    @Args({ name: 'order', defaultValue: 'DESC', nullable: true })
+    order: string, //
+  ) {
+    return this.storesService.findPickRank({ order });
   }
 
   @Query(() => [Store])
