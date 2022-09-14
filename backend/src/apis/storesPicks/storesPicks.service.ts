@@ -56,13 +56,32 @@ export class StoresPicksService {
     console.log(picktrue);
     if (picktrue) {
       await this.pickRepository.delete({ pickID: picktrue.pickID });
+      return false;
     } else {
       await this.pickRepository.save({
         store: pickstore,
         user: myuser,
       });
+      return true;
     }
+  }
 
-    return true;
+  async PickCount({ storeID }) {
+    const allPicks = await this.pickRepository.find({
+      relations: ['user', 'store'],
+    });
+
+    const result = [];
+    for (let i = 0; i < allPicks.length; i++) {
+      if (allPicks[i].store.storeID === storeID) {
+        result.push(
+          await this.userRepository.findOne({
+            where: { userID: allPicks[i].user.userID },
+          }),
+        );
+      }
+    }
+    console.log(result.length);
+    return result.length;
   }
 }
