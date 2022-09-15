@@ -27,9 +27,10 @@ export class UsersResolver {
   @Query(() => [User])
   fetchUsers(
     @Context() context: any, //
+    @Args('name') name: string, //
   ) {
     const email = context.req.user.email;
-    return this.usersService.findAll({ email });
+    return this.usersService.findAll({ email, name });
   }
 
   @UseGuards(GqlAuthAccessGuard)
