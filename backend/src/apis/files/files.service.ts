@@ -18,7 +18,7 @@ export class FilesService {
       waitedFiles.map(
         (el) =>
           new Promise((resolve, reject) => {
-            const fname = `${getToday()}/${uuidv4()}/origin/${el.filename}`;
+            const fname = `${getToday()}/${uuidv4()}/${el.filename}`;
             el.createReadStream()
               .pipe(storage.file(fname).createWriteStream())
               .on('finish', () => resolve(`${bucket}/${fname}`))
