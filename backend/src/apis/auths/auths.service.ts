@@ -72,8 +72,8 @@ export class AuthService {
     this.setRefreshToken({ user, res });
     res.redirect(
       //redirect는 페이지를 전환하세요를 의미.
-      // "http://localhost:5500/homework/main-project/frontend/login/index.html" -> 백에서 테스트 할때,
-      'http://localhost:3000',
+      // 'http://localhost:5500/frontend/login/index.html', //-> 백에서 테스트 할때,
+      'http://localhost:3000/',
     );
   }
 }

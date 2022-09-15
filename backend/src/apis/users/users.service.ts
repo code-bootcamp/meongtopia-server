@@ -6,7 +6,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Storage } from '@google-cloud/storage';
 import { CreateUserInput } from './dto/createUser.input';
@@ -32,14 +32,16 @@ export class UsersService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async findAll({ email }) {
+  async findAll({ email, name }) {
     const user = await this.userRepository.findOne({
       where: { email },
     });
     if (user.role !== 'ADMIN') {
       throw new ConflictException('관리자 권한이 아닙니다.');
     }
-    return this.userRepository.find({});
+    return this.userRepository.find({
+      where: { name: Like(`%${name}%`) },
+    });
   }
 
   findUserOne({ email }) {
