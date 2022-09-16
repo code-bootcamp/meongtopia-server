@@ -127,7 +127,7 @@ export class UsersResolver {
     @Args('updateUserPwdInput') updateUserPwdInput: string,
   ) {
     const myToken = await this.cacheManager.get(phone);
-    if (myToken!) {
+    if (!myToken) {
       throw new UnprocessableEntityException('인증을 하세요');
     }
 

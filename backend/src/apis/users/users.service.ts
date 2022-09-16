@@ -177,15 +177,13 @@ export class UsersService {
   async deleteprofile({ email }) {
     const bucket = process.env.bucket;
     const user = await this.userRepository.findOne({ where: { email: email } });
-    const prevImg = user.profileImgUrl.split(
-      `${bucket}/profile/${getToday()}/`,
-    );
+    const prevImg = user.profileImgUrl.split(`${bucket}/${getToday()}`);
     const prevImgName = prevImg[prevImg.length - 1];
     console.log(prevImg, '======');
 
     const storage = new Storage({
-      projectId: process.env.projectID,
-      keyFilename: process.env.keyFileName,
+      projectId: process.env.GCP_PROJECT_ID,
+      keyFilename: process.env.GCP_PROJECT_KEY_FILENAME,
     });
     const result = await storage.bucket(bucket).file(prevImgName).delete();
 
