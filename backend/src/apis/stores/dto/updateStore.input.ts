@@ -1,10 +1,12 @@
-import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql';
 import { updatePetInput } from 'src/apis/pets/dto/updatePet.input';
 import { CreateStoreInput } from './createStore.input';
 
 //PartialType(CreateStoreInput)
 @InputType()
-export class UpdateStoreInput extends OmitType(CreateStoreInput, ['pet']) {
+export class UpdateStoreInput extends PartialType(
+  OmitType(CreateStoreInput, ['pet']),
+) {
   @Field(() => [updatePetInput], { nullable: true })
-  petInput: updatePetInput[];
+  pet: updatePetInput[];
 }

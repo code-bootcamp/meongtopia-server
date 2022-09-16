@@ -22,6 +22,7 @@ export class ReviewesResponsesService {
     });
     const reviewRes = await this.reviewResponseRepository.find({
       where: { user: { userID: user.userID } },
+      relations: ['user', 'review'],
     });
     return reviewRes;
   }
@@ -30,19 +31,17 @@ export class ReviewesResponsesService {
     const user: any = await this.userRepository.findOne({
       where: { email },
     });
-    const review = await this.reviewRepository.findOne({
-      where: { reviewID },
-      relations: ['store', 'user'],
-    });
-    const response = await this.reviewResponseRepository.save({
-      contents,
-      user,
+    const beforeReview: any = await this.reviewResponseRepository.find({
+      where: {
+        user: { userID: user.userID },
+        review: { reviewID },
+      },
+      relations: ['user', 'review'],
     });
     this.reviewRepository.save({
-      ...review,
-      reviewRes: response,
+      ...beforeReview,
+      contents,
     });
-    return response;
   }
 
   async update({ email, contents }) {

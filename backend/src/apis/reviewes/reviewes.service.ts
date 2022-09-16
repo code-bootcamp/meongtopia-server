@@ -5,11 +5,14 @@ import { User } from '../users/entities/user.entity';
 import { Review } from './entities/review.entity';
 import { Store } from '../stores/entities/store.entity';
 import { Reservation } from '../reservations/entities/reservation.entity';
+import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
 @Injectable()
 export class ReviewesService {
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
+    @InjectRepository(ReviewResponse)
+    private readonly reviewResponseRepository: Repository<ReviewResponse>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Store)
@@ -26,6 +29,20 @@ export class ReviewesService {
       where: { user: { userID: user.userID } },
     });
     return reviewes;
+  }
+
+  async findStoreReview({ storeID }) {
+    const store = await this.storeRepository.findOne({
+      where: { storeID },
+    });
+    if (!store) {
+      throw new ConflictException('해당 가게 정보가 없습니다.');
+    }
+    const reviews = await this.reviewRepository.find({
+      where: { store: { storeID } },
+      relations: ['user', 'store', 'reviewRes'],
+    });
+    return reviews;
   }
 
   async create({ createReviewInput, email, storeID }) {
@@ -46,8 +63,6 @@ export class ReviewesService {
     if (!isRes) {
       throw new ConflictException('예약 내역이 존재하지 않습니다.');
     }
-    //평균 평점 변경하기
-    // const avgRating = (store.avgRating + rating) / 2;
     const avgRating = Math.round(((store.avgRating + rating) / 2) * 100) / 100;
 
     const newStore: any = await this.storeRepository.save({
@@ -55,11 +70,17 @@ export class ReviewesService {
       avgRating: avgRating,
     });
 
+    const reviewRes: any = await this.reviewResponseRepository.save({
+      contents: '',
+      user: newStore.user.userID,
+    });
+
     const review = await this.reviewRepository.save({
       contents,
       rating,
       user,
       store: newStore,
+      reviewRes: reviewRes,
     });
     return review;
   }
@@ -108,6 +129,7 @@ export class ReviewesService {
     });
     return reservation === null ? false : true;
   }
+
   async count({ storeID }) {
     const reviews = await this.reviewRepository.find({
       where: {

@@ -16,23 +16,23 @@
     ></script>
     <script>
       function mypayment() {
-        const myAmount = Number(document.getElementById("amount").value);
+        const myAmount = Number(document.getElementById('amount').value);
 
         const IMP = window.IMP; // 생략 가능
-        IMP.init("imp04533111"); // Example: imp00000000
+        IMP.init('imp04533111'); // Example: imp00000000
         IMP.request_pay(
           {
             // param
-            pg: "nice",
-            pay_method: "card",
-            name: "키보드",
+            pg: 'nice',
+            pay_method: 'card',
+            name: '키보드',
             amount: myAmount,
-            buyer_email: "aaa@gmail.com",
-            buyer_name: "철수",
-            buyer_tel: "010-1111-2222",
-            buyer_addr: "서울특별시 강남구 신사동",
-            buyer_postcode: "01181",
-            m_redirect_url: "", // 모바일 결제후 리다이렉트될 주소!!
+            buyer_email: 'aaa@gmail.com',
+            buyer_name: '철수',
+            buyer_tel: '010-1111-2222',
+            buyer_addr: '서울특별시 강남구 신사동',
+            buyer_postcode: '01181',
+            m_redirect_url: '', // 모바일 결제후 리다이렉트될 주소!!
           },
           async (rsp) => {
             // callback
@@ -41,7 +41,7 @@
               console.log(rsp);
 
               const data = await axios.post(
-                "http://localhost:3000/graphql",
+                'http://localhost:3000/graphql',
                 {
                   query: `
                       mutation {
@@ -54,18 +54,18 @@
                 {
                   headers: {
                     authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJiQG5hdmVyLmNvbSIsInN1YiI6ImVkMTMxOTQ0LTZlYjMtNDYxZC05ZGQ2LTE1MWYwY2ZmMzYzZiIsImlhdCI6MTY2MjU0NDMxOCwiZXhwIjoxNjYyNTQ3OTE4fQ.lyl7oLwuxGivo45MC9vgB8Lod96oIKCpQzTwlOxdekQ",
+                      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjFAYS5jb20iLCJzdWIiOiI0OWU4YTY5OC1iZjNjLTQwNjktYWE4MC0yYjBkNGEzYzcxYzEiLCJpYXQiOjE2NjMzMDU3NTgsImV4cCI6MTY2MzMyMzc1OH0.HOybkGPw4zIToAc1rUPgAWcxebonPgeYKv7MJAzSe18',
                   },
-                }
+                },
               );
 
               console.log(data);
-              alert("결제 성공했습니다.");
+              alert('결제 성공했습니다.');
             } else {
               // 결제 실패시
-              alert("결제 실패했습니다.");
+              alert('결제 실패했습니다.');
             }
-          }
+          },
         );
       }
     </script>

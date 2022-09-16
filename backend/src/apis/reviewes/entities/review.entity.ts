@@ -29,18 +29,19 @@ export class Review {
   rating: number;
 
   @CreateDateColumn()
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;
 
   @ManyToOne(() => Store)
-  @Field(() => [Store])
-  store: Store[];
+  @Field(() => Store)
+  store: Store;
 
   @ManyToOne(() => User)
-  @Field(() => [User])
-  user: User[];
+  @Field(() => User)
+  user: User;
 
   @JoinColumn()
   @OneToOne(() => ReviewResponse, { nullable: true })

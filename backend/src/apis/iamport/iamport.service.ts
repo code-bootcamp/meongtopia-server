@@ -26,9 +26,6 @@ export class IamportService {
         error.response.data.message,
         error.response.status,
       );
-      // throw new UnprocessableEntityException(
-      //   "서버 환경 변수 설정 오류입니다. 관리자에게 문의해주세요."
-      // );
     }
   }
 

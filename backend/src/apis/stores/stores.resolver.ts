@@ -26,7 +26,9 @@ export class StoresResolver {
     if (storeCache) return storeCache;
 
     const storeES = await this.elasticsearchService.search({
-      index: 'myproduct8',
+      index: 'myproduct10',
+      // 배포시
+      // index: 'search.v1',
       query: {
         term: { name: search },
       },

@@ -33,8 +33,8 @@ export class ReviewResponse {
   deletedAt: Date;
 
   @ManyToOne(() => User)
-  @Field(() => [User])
-  user: User[];
+  @Field(() => User)
+  user: User;
 
   @OneToOne(() => Review)
   @Field(() => Review)
