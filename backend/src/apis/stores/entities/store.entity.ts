@@ -75,10 +75,6 @@ export class Store {
   @Field(() => Int)
   pickCount: number;
 
-  @Column({ nullable: true })
-  @Field(() => String)
-  menuImg: string;
-
   @DeleteDateColumn()
   deletedAt: Date;
 

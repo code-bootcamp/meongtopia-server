@@ -47,6 +47,7 @@ export class UsersService {
   findUserOne({ email }) {
     return this.userRepository.findOne({
       where: { email },
+      relations: ['pick', 'pick.store', 'pick.store.storeImg'],
     });
   }
 

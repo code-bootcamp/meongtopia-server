@@ -30,9 +30,6 @@ export class CreateStoreInput {
   @Field(() => String, { nullable: true })
   addressDetail: string;
 
-  @Field(() => String, { nullable: true })
-  menuImg: string;
-
   @Field(() => Int, { nullable: true })
   bigDog: number;
 

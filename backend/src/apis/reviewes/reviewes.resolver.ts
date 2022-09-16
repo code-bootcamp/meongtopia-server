@@ -11,11 +11,19 @@ export class ReviewesResolver {
   constructor(
     private readonly reviewesService: ReviewesService, //
   ) {}
+
   @Query(() => Int)
   ReviewCount(
     @Args('storeID') storeID: string, //
   ) {
     return this.reviewesService.count({ storeID });
+  }
+
+  @Query(() => [Review])
+  fetchStoreReviewes(
+    @Args('storeID') storeID: string, //
+  ) {
+    return this.reviewesService.findStoreReview({ storeID });
   }
 
   @UseGuards(GqlAuthAccessGuard)

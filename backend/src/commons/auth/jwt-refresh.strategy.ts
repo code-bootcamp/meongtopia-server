@@ -27,7 +27,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       `refreshToken:${refreshToken}`,
     );
     if (checkToken) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('해당 정보가 없습니다.');
     }
     return {
       email: payload.email,

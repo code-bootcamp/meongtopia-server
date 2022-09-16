@@ -10,13 +10,12 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     });
   }
   validate(accessToken, refreshToken, profile) {
-    // console.log(profile.displayName, 'profileeeeee');
-    console.log(profile, '========');
-    console.log(accessToken);
-
     return {
       email: profile._json.kakao_account.email,
       name: profile.displayName,
+      hashedPassword: '12312313123312',
+      nickname: profile.displayName,
+      phone: '010011112222',
     }; //req.user 등록
   }
 }

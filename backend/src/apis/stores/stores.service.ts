@@ -130,41 +130,72 @@ export class StoresService {
   }
 
   async update({ email, updateStoreInput }) {
-    const user = await this.usersRepository.findOne({
-      where: { email },
-    });
-
-    //테스용
-    const store: any = await this.storesRepository.findOne({
-      where: { user: { userID: user.userID } },
-      relations: ['storeTag', 'locationTag', 'user'],
-    });
-
-    // if (!store) {
-    //   throw new ConflictException('해당 상품 정보가 없습니다.');
-    // }
-
-    //store 이미지 중복생성 방지
-    if (updateStoreInput.storeImage) {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { email },
+      });
+      const beforeStore = await this.storesRepository.findOne({
+        where: { user: { userID: user.userID } },
+      });
+      this.storesRepository.softDelete({
+        storeID: beforeStore.storeID,
+      });
+      this.petRepository.delete({
+        store: { storeID: beforeStore.storeID },
+      });
       this.storeImageRepository.delete({
-        store: { storeID: store.storeID },
+        store: { storeID: beforeStore.storeID },
       });
-      this.storeImageRepository.save({
-        store: store,
-        url: updateStoreInput.storeImage,
-      });
-    }
-    // if (updateStoreInput.pet) {
-    //   const a = await this.petRepository.find({
-    //     where: { store: { storeID: store.storeID } },
-    //   });
-    // }
 
-    const newStore = this.storesRepository.save({
-      ...store,
-      ...updateStoreInput,
-    });
-    return newStore;
+      const { pet, storeImg, storeTag, locationTag, ...store } =
+        updateStoreInput;
+
+      //다대다 태그 저장
+      const tag = [];
+      for (let i = 0; i < storeTag.length; i++) {
+        const tagIs = await this.storeTagsRepository.findOne({
+          where: { name: storeTag[i] },
+        });
+        tag.push(tagIs);
+      }
+
+      const locationTagData = await this.StrLocationTagRepository.findOne({
+        where: { name: locationTag },
+      });
+      // if (!locationTagData) {
+      //   throw new ConflictException('해당 지역 태그가 없습니다.');
+      // }
+
+      //일대일 정보 저장
+      const storeData = await this.storesRepository.save({
+        user,
+        locationTag: locationTagData,
+        storeTag: tag,
+        ...store,
+      });
+
+      //펫 이미지 테이블에 저장
+      for (let i = 0; i < pet.length; i++) {
+        await this.petRepository.save({
+          ...pet[i],
+          store: storeData,
+          storeTag,
+        });
+      }
+
+      //이미지는 store 저장하고 저장
+      for (let i = 0; i < storeImg.length; i++) {
+        const url = storeImg[i];
+        await this.storeImageRepository.save({
+          url,
+          store: storeData,
+        });
+      }
+
+      return storeData;
+    } catch (error) {
+      throw new error();
+    }
   }
 
   async delete({ email }) {
