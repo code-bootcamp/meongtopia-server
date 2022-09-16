@@ -17,7 +17,7 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       hashedPassword: '12312313123312',
       name: profile.displayName,
       nickname: profile.displayName,
-      phone: '010011112222',
+      phone: '01011112222',
     };
   }
 }

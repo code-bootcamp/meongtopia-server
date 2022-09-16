@@ -15,7 +15,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       name: profile.displayName,
       hashedPassword: '12312313123312',
       nickname: profile.displayName,
-      phone: '010011112222',
+      phone: '01011112222',
     }; //req.user 등록
   }
 }

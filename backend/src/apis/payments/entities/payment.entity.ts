@@ -21,23 +21,23 @@ registerEnumType(PAYMENT_ENUM, {
 @Entity()
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   paymentID: string;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   impUid: string;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   amount: number;
 
   @Column({ type: 'enum', enum: PAYMENT_ENUM })
-  @Field(() => PAYMENT_ENUM)
+  @Field(() => PAYMENT_ENUM, { nullable: true })
   status: PAYMENT_ENUM;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 
   @ManyToOne(() => User)

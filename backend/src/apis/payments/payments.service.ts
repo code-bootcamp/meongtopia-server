@@ -30,6 +30,8 @@ export class PaymentService {
 
     try {
       //1. payment 테이블에 거래기록 한줄 생성
+      console.log('payment service ');
+      console.log(impUid, amount, _user);
       const payment = this.paymentRepository.create({
         impUid: impUid,
         amount: amount,
@@ -44,7 +46,9 @@ export class PaymentService {
         where: { userID: _user.userID },
         lock: { mode: 'pessimistic_write' },
       });
+      console.log(user);
       const point = user.point - amount;
+      console.log(payment);
       //3.유저의 돈 업데이트->유저가 얼마를 가지고 있는지 알아야함! 그래야 돈 업데이트 가능~
       const updateUser = this.userRepository.create({
         ...user,
