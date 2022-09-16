@@ -32,23 +32,24 @@ export class PaymentService {
       //1. payment 테이블에 거래기록 한줄 생성
       console.log('payment service ');
       console.log(impUid, amount, _user);
+      //유저 정보 불러오기
+      const user = await queryRunner.manager.findOne(User, {
+        where: { email: _user.email },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      console.log('=====user 정보 ======');
+      console.log(user);
+
       const payment = this.paymentRepository.create({
         impUid: impUid,
         amount: amount,
-        user: _user, //user,
+        user: user, //user,
         status: PAYMENT_ENUM.PAYMENT,
       });
-
       await queryRunner.manager.save(payment);
 
-      //2.유저의 돈 찾아오기. 내가 찾아오고 있으면 다른데서 찾는거 막아주기 -> 영희,철수,맹구의 경우!
-      const user = await queryRunner.manager.findOne(User, {
-        where: { userID: _user.userID },
-        lock: { mode: 'pessimistic_write' },
-      });
-      console.log(user);
       const point = user.point - amount;
-      console.log(payment);
       //3.유저의 돈 업데이트->유저가 얼마를 가지고 있는지 알아야함! 그래야 돈 업데이트 가능~
       const updateUser = this.userRepository.create({
         ...user,
