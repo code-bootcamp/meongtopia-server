@@ -8,7 +8,6 @@ import { StoresModule } from './apis/stores/stores.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { StoreTagsModule } from './apis/storesTags/storesTags.module';
-import { StoresImgsModule } from './apis/storesImgs/storesImgs.module';
 import { StoresPicksModule } from './apis/storesPicks/storesPicks.module';
 import { StrLocationsTagsModule } from './apis/strLocationsTags/strLocationsTags.module';
 import { ReviewesModule } from './apis/reviewes/reviewes.module';
@@ -21,6 +20,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { PaymentModule } from './apis/payments/payments.module';
 import { BoardsModule } from './apis/boards/boards.module';
+import { IncomesModule } from './apis/incomes/incomes.module';
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import { BoardsModule } from './apis/boards/boards.module';
     StoresPicksModule,
     StoreTagsModule,
     StrLocationsTagsModule,
-    StoresImgsModule,
+    IncomesModule,
     UsersModule,
     AuthModule,
     FilesModule,

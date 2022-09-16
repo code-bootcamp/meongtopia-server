@@ -4,6 +4,7 @@ import { Store } from 'src/apis/stores/entities/store.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -32,6 +33,9 @@ export class Reservation {
   @Column({ nullable: true })
   @Field(() => String)
   date: string;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => User)

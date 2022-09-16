@@ -10,5 +10,6 @@ export function getToday() {
 export function getDate() {
   const date = new Date();
   const day = date.getDate();
-  return day;
+  const month = date.getMonth() + 1;
+  return `${month}/${day}`;
 }

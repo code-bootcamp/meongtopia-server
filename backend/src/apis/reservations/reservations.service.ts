@@ -26,7 +26,8 @@ export class ReservationsService {
     });
     return this.reservationsRepository.find({
       where: { user: { userID: user.userID } },
-      relations: ['store'],
+      relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
+      withDeleted: true,
     });
   }
 
@@ -79,10 +80,14 @@ export class ReservationsService {
     }
     const amount = reservation.amount;
     const incomeID = reservation.income.incomeID;
-
+    //유저에게 포인트 돌려주기
+    this.usersRepository.save({
+      ...user,
+      point: user.point + amount,
+    });
     //income 결제취소건 반영하기
     this.deleteIncome({ incomeID, amount });
-    const result = await this.reservationsRepository.delete({
+    const result = await this.reservationsRepository.softDelete({
       user: { userID: user.userID },
       store: { storeID: storeID },
       date,
@@ -91,18 +96,18 @@ export class ReservationsService {
   }
 
   async writeIncome({ cash, store }) {
-    const date = getDate();
+    const date: any = getDate();
     const income = await this.incomeRepository.findOne({
       where: {
         store: { storeID: store.storeID },
-        date,
+        date: date,
       },
       relations: ['store'],
     });
 
     if (!income) {
       return this.incomeRepository.save({
-        date,
+        date: date,
         paymentNum: 1,
         totalCash: cash,
         store,
@@ -110,7 +115,7 @@ export class ReservationsService {
     } else {
       const incomeData = await this.incomeRepository.findOne({
         where: {
-          date,
+          date: date,
           store: { storeID: store.storeID },
         },
         relations: ['store'],
@@ -119,7 +124,7 @@ export class ReservationsService {
       const paymentNum = incomeData.paymentNum + 1;
       return this.incomeRepository.save({
         ...incomeData,
-        date,
+        date: date,
         paymentNum,
         totalCash,
       });
