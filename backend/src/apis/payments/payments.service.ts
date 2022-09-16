@@ -49,7 +49,7 @@ export class PaymentService {
       });
       await queryRunner.manager.save(payment);
 
-      const point = user.point - amount;
+      const point = user.point + amount;
       //3.유저의 돈 업데이트->유저가 얼마를 가지고 있는지 알아야함! 그래야 돈 업데이트 가능~
       const updateUser = this.userRepository.create({
         ...user,

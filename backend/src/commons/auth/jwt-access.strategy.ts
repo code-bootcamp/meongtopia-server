@@ -15,7 +15,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     });
   }
 
-  async validate(req, payload: any) {
+  async validate(req, payload) {
     const header = JSON.parse(JSON.stringify(req.headers));
     const accessToken = header.authorization.replace('Bearer ', '');
     const checkToken = await this.cacheManager.get(
