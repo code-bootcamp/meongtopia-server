@@ -21,6 +21,7 @@ export class StoresPicksService {
       where: { user: { userID: userID } },
       relations: ['store'],
     });
+
     const result = allPicks.map((pick) => {
       const storeID = pick.store.storeID;
       return this.storeRepository.findOne({
@@ -28,6 +29,7 @@ export class StoresPicksService {
         relations: ['locationTag', 'storeImg', 'pet', 'user', 'storeTag'],
       });
     });
+    console.log(result);
     return result;
   }
 
