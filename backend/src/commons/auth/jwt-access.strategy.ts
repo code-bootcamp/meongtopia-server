@@ -24,7 +24,6 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     if (checkToken) {
       throw new UnauthorizedException();
     }
-    console.log(payload);
     return {
       email: payload.email,
       userID: payload.sub,

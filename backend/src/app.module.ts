@@ -20,6 +20,7 @@ import { ReservationsModule } from './apis/reservations/reservations.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { PaymentModule } from './apis/payments/payments.module';
+import { BoardsModule } from './apis/boards/boards.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { PaymentModule } from './apis/payments/payments.module';
     AuthModule,
     FilesModule,
     PaymentModule,
+    BoardsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
