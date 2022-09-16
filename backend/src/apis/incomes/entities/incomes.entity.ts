@@ -16,8 +16,8 @@ export class Income {
   incomeID: string;
 
   @Column()
-  @Field(() => Int)
-  date: number;
+  @Field(() => String)
+  date: string;
 
   @Column({ default: 0 })
   @Field(() => Int)

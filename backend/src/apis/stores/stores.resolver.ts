@@ -17,9 +17,10 @@ export class StoresResolver {
     private readonly cacheManager: Cache,
   ) {}
 
-  @Query(() => [Store])
+  @Query(() => [Store], { description: 'Return : 검색한 가게들의 정보' })
   async searchStores(
-    @Args({ name: 'search', nullable: true }) search: string, //
+    @Args({ name: 'search', nullable: true, description: '검색어' })
+    search: string, //
   ) {
     //가게 이름으로 검색
     const storeCache = await this.cacheManager.get(`store:${search}`);
