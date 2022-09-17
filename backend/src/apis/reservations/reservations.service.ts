@@ -27,7 +27,7 @@ export class ReservationsService {
     return this.reservationsRepository.find({
       where: { user: { userID: user.userID } },
       relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
-      withDeleted: true,
+      withDeleted: false,
     });
   }
 
