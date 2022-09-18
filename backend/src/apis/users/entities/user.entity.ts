@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Review } from 'src/apis/reviewes/entities/review.entity';
 import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
 // import { Store } from 'src/apis/stores/entities/store.entity';
 import {
@@ -9,6 +10,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
   // OneToMany,
   // JoinTable,
 } from 'typeorm';
@@ -92,7 +94,13 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @JoinColumn()
   @OneToMany(() => Pick, (pick) => pick.user)
   @Field(() => [Pick])
   pick: Pick;
+
+  @JoinColumn()
+  @OneToMany(() => Review, (review) => review.user)
+  @Field(() => [Review])
+  review: Review[];
 }

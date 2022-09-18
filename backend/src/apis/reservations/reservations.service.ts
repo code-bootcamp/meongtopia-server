@@ -27,8 +27,27 @@ export class ReservationsService {
     return this.reservationsRepository.find({
       where: { user: { userID: user.userID } },
       relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
-      withDeleted: false,
+      withDeleted: true,
     });
+  }
+
+  async findCancel({ email }) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+    const reservationData = await this.reservationsRepository.find({
+      where: {
+        user: { userID: user.userID },
+      },
+      relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
+      withDeleted: true,
+    });
+    const result = [];
+    for (let i = 0; i < reservationData.length; i++) {
+      if (reservationData[i].deletedAt !== null)
+        result.push(reservationData[i]);
+    }
+    return result;
   }
 
   async create({ createReservationInput, email, storeID }) {

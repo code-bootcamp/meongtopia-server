@@ -39,7 +39,7 @@ export class Review {
   @Field(() => Store)
   store: Store;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.review)
   @Field(() => User)
   user: User;
 
