@@ -9,18 +9,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Storage } from '@google-cloud/storage';
-import { CreateUserInput } from './dto/createUser.input';
 import { getToday } from 'src/commons/utils/utils';
-import { resolve } from 'path';
-import { rejects } from 'assert';
-import nodemailer from 'nodemailer';
 import coolsms from 'coolsms-node-sdk';
-import axios from 'axios';
 import { Cache } from 'cache-manager';
-import { Mutation } from '@nestjs/graphql';
 
 import { MailerService } from '@nestjs-modules/mailer';
-import { template } from 'handlebars';
 
 @Injectable()
 export class UsersService {
@@ -52,6 +45,9 @@ export class UsersService {
         'pick.store',
         'pick.store.storeImg',
         'pick.store.storeTag',
+        'review',
+        'review.store',
+        'review.reviewRes',
       ],
     });
   }
@@ -123,6 +119,7 @@ export class UsersService {
       const myuser = await this.userRepository.findOne({
         where: { email: email },
       });
+      //const에 담을 필요가 있는가?
       const result = await this.userRepository.save({
         ...myuser,
         password: newhashedPassword,
