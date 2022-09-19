@@ -27,7 +27,7 @@ export class Store {
   storeID: string;
 
   @Column({ type: 'varchar', nullable: false })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name: string;
 
   @Column({ nullable: true })
