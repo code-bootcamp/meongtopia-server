@@ -64,7 +64,7 @@ export class UsersService {
 
     // throw new HttpException('이미 등록된 이메일입니다.', HttpStatus.CONFLICT);
     // const template = await this.createTemplate({ name, email, phone });
-    await this.sendEmail({ email, name });
+    // await this.sendEmail({ email, name });
 
     const userData = await this.userRepository.save({
       ...createUserInput,
