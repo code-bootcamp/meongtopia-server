@@ -94,18 +94,18 @@ export class StoresResolver {
   @Mutation(() => Store)
   updateStore(
     @Args('updateStoreInput') updateStoreInput: UpdateStoreInput, //
+    @Args('storeID') storeID: string,
     @Context() context: any,
   ) {
     const email = context.req.user.email;
-    return this.storesService.update({ email, updateStoreInput });
+    return this.storesService.update({ email, updateStoreInput, storeID });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteStore(
-    @Context() context: any, //
+    @Args('storeID') storeID: string, //
   ) {
-    const email = context.req.user.email;
-    return this.storesService.delete({ email });
+    return this.storesService.delete({ storeID });
   }
 }

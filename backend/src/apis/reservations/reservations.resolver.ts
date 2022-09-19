@@ -15,9 +15,11 @@ export class ReservationsResolver {
   @Query(() => [Reservation])
   fetchReservation(
     @Context() context: any, //
+    @Args({ name: 'order', defaultValue: 'DESC', nullable: true })
+    order: string,
   ) {
     const email = context.req.user.email;
-    return this.reservationsService.find({ email });
+    return this.reservationsService.find({ email, order });
   }
 
   @UseGuards(GqlAuthAccessGuard)

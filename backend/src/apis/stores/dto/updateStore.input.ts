@@ -7,9 +7,6 @@ import { CreateStoreInput } from './createStore.input';
 export class UpdateStoreInput extends PartialType(
   OmitType(CreateStoreInput, ['pet']),
 ) {
-  @Field(() => String)
-  storeID: string;
-
   @Field(() => [updatePetInput], { nullable: true })
   pet: updatePetInput[];
 }
