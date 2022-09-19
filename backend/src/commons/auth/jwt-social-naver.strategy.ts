@@ -15,7 +15,7 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
       email: profile._json.email,
       name: profile.displayName,
       nickname: profile.displayName,
-      password: process.env.SOCIAL_LOGIN_PW,
+      hashedPassword: process.env.SOCIAL_LOGIN_PW,
       phone: process.env.SOCIAL_LOGIN_PHONE,
     };
   }

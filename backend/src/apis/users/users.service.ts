@@ -53,9 +53,8 @@ export class UsersService {
     });
   }
 
-  async create({ role, access, ...createUserInput }) {
+  async create({ hashedPassword: password, role, access, ...createUserInput }) {
     const { name, email, phone, ...rest } = createUserInput;
-    const password = await bcrypt.hash(createUserInput.password, 10.2);
     const user = await this.userRepository.findOne({
       where: { email },
     });

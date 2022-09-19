@@ -21,6 +21,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { PaymentModule } from './apis/payments/payments.module';
 import { BoardsModule } from './apis/boards/boards.module';
 import { IncomesModule } from './apis/incomes/incomes.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { IncomesModule } from './apis/incomes/incomes.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {

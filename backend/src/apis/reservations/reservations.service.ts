@@ -1,4 +1,5 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getDate, getToday } from 'src/commons/utils/utils';
 import { Repository } from 'typeorm';
@@ -236,6 +237,8 @@ export class ReservationsService {
 
     return result.affected ? true : false;
   }
+
+  // @Cron('')
   async checkExpired() {
     const reservations = await this.reservationRepository.find();
     const today = getToday();
