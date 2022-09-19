@@ -13,7 +13,7 @@ export class ReservationsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Reservation])
-  fetchReservation(
+  fetchUserReservation(
     @Context() context: any, //
     @Args({ name: 'order', defaultValue: 'DESC', nullable: true })
     order: string,
@@ -32,7 +32,7 @@ export class ReservationsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Reservation)
+  @Mutation(() => Reservation, { description: '사용자가 예약하는 기능' })
   async createReservation(
     @Args('storeID') storeID: string,
     @Args('createReservationInput')
@@ -52,7 +52,7 @@ export class ReservationsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '사용자가 예약취소하는 기능' })
   async cancelReservation(
     @Args('storeID') storeID: string, //
     @Args('date') date: string,
@@ -61,5 +61,19 @@ export class ReservationsResolver {
     const email = context.req.user.email;
     await this.reservationsService.checkReservation({ storeID, email, date });
     return this.reservationsService.cancel({ email, storeID, date });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '예약 확인으로 바꾸는 기능' })
+  checkReservation(
+    @Args({ name: 'resID' }) resID: string, //
+  ) {
+    return this.reservationsService.changeReservation({ resID });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String, { description: '만료 확인하는 기능' })
+  checkExpired() {
+    return this.reservationsService.checkExpired();
   }
 }

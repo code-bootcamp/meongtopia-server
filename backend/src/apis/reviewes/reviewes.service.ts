@@ -31,7 +31,7 @@ export class ReviewesService {
     return reviewes;
   }
 
-  async findStoreReview({ storeID }) {
+  async findStoreReview({ storeID, order }) {
     const store = await this.storeRepository.findOne({
       where: { storeID },
     });
@@ -41,6 +41,7 @@ export class ReviewesService {
     const reviews = await this.reviewRepository.find({
       where: { store: { storeID } },
       relations: ['user', 'store', 'reviewRes'],
+      order: { createdAt: order },
     });
     return reviews;
   }

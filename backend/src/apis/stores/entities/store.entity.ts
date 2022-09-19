@@ -1,5 +1,6 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Pet } from 'src/apis/pets/entities/pet.entity';
+import { Reservation } from 'src/apis/reservations/entities/reservation.entity';
 import { StoreImg } from 'src/apis/storesImgs/entities/storeImg.entity';
 import { StoreTag } from 'src/apis/storesTags/entities/storeTag.entity';
 import { StrLocationTag } from 'src/apis/strLocationsTags/entities/strLocationTag.entity';
@@ -96,7 +97,11 @@ export class Store {
   @Field(() => [Pet])
   pet: Pet[];
 
-  //테스트용
+  @JoinColumn()
+  @OneToMany(() => Reservation, (reservation) => reservation.store)
+  @Field(() => [Reservation])
+  reservation: Reservation[];
+
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;

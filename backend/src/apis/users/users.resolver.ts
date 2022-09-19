@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -46,12 +46,10 @@ export class UsersResolver {
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
-    const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'CLIENT';
     const access = 'ALLOWED';
     return this.usersService.create({
       ...createUserInput,
-      hashedPassword,
       role,
       access,
     });
@@ -61,12 +59,10 @@ export class UsersResolver {
   async createOwner(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
-    const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'OWNER';
     const access = 'PENDDING';
     return this.usersService.create({
       ...createUserInput,
-      hashedPassword,
       role,
       access,
     });
@@ -76,11 +72,9 @@ export class UsersResolver {
   async createAdim(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
-    const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
     const role = 'ADMIN';
     const access = 'ALLOWED';
     return this.usersService.create({
-      hashedPassword,
       role,
       access,
       ...createUserInput,

@@ -11,9 +11,9 @@ import { Reservation } from './entities/reservation.entity';
 export class ReservationsService {
   constructor(
     @InjectRepository(Reservation)
-    private readonly reservationsRepository: Repository<Reservation>,
+    private readonly reservationRepository: Repository<Reservation>,
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
     @InjectRepository(Store)
     private readonly storeRepository: Repository<Store>,
     @InjectRepository(Income)
@@ -21,22 +21,22 @@ export class ReservationsService {
   ) {}
 
   async find({ email, order }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
-    return this.reservationsRepository.find({
+    return this.reservationRepository.find({
       where: { user: { userID: user.userID } },
       relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
       withDeleted: true,
-      order: { createAt: order },
+      order: { date: order },
     });
   }
 
   async findCancel({ email }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
-    const reservationData = await this.reservationsRepository.find({
+    const reservationData = await this.reservationRepository.find({
       where: {
         user: { userID: user.userID },
       },
@@ -52,12 +52,12 @@ export class ReservationsService {
   }
 
   async create({ createReservationInput, email, storeID }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
 
     const point = user.point - createReservationInput.amount;
-    this.usersRepository.save({
+    this.userRepository.save({
       ...user,
       point,
     });
@@ -71,7 +71,7 @@ export class ReservationsService {
     const income = await this.writeIncome({ cash, store });
 
     const date = getToday();
-    const result = await this.reservationsRepository.save({
+    const result = await this.reservationRepository.save({
       ...createReservationInput,
       user: user,
       store: store,
@@ -82,11 +82,11 @@ export class ReservationsService {
   }
 
   async cancel({ email, storeID, date }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
 
-    const reservation = await this.reservationsRepository.findOne({
+    const reservation = await this.reservationRepository.findOne({
       where: {
         user: { userID: user.userID },
         store: { storeID },
@@ -98,16 +98,27 @@ export class ReservationsService {
     if (!reservation) {
       throw new UnprocessableEntityException('예약 건이 존재하지 않습니다.');
     }
+
+    //삭제 전에 res상태 바꾸고 삭제하기
+    this.reservationRepository.save({
+      ...reservation,
+      state: 'CANCEL',
+    });
+
+    //필요한 변수 뽑기
     const amount = reservation.amount;
     const incomeID = reservation.income.incomeID;
+
     //유저에게 포인트 돌려주기
-    this.usersRepository.save({
+    this.userRepository.save({
       ...user,
       point: user.point + amount,
     });
+
     //income 결제취소건 반영하기
     this.deleteIncome({ incomeID, amount });
-    const result = await this.reservationsRepository.softDelete({
+
+    const result = await this.reservationRepository.softDelete({
       user: { userID: user.userID },
       store: { storeID: storeID },
       date,
@@ -170,11 +181,11 @@ export class ReservationsService {
   }
 
   async checkReservation({ email, storeID, date }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
 
-    const reservation = await this.reservationsRepository.findOne({
+    const reservation = await this.reservationRepository.findOne({
       where: {
         store: { storeID },
         user: { userID: user.userID },
@@ -187,7 +198,7 @@ export class ReservationsService {
   }
 
   async checkUserPoint({ email, createReservationInput }) {
-    const user = await this.usersRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
     });
     if (user.point < createReservationInput.amount) {
@@ -195,5 +206,69 @@ export class ReservationsService {
         '결제 가능한 포인트가 부족합니다.',
       );
     }
+  }
+
+  async changeReservation({ resID }) {
+    const reservation = await this.reservationRepository.findOne({
+      where: { resID },
+      relations: [
+        'user',
+        'store',
+        'income',
+        'store.storeImg',
+        'store.pet',
+        'store.storeTag',
+      ],
+    });
+    if (!reservation) {
+      throw new UnprocessableEntityException('예약 건이 존재하지 않습니다.');
+    }
+    //삭제 전에 res상태 바꾸고 삭제하기
+    this.reservationRepository.save({
+      ...reservation,
+      state: 'USED',
+    });
+    //삭제
+    const result = await this.reservationRepository.softDelete({
+      resID,
+      store: { storeID: reservation.store.storeID },
+    });
+
+    return result.affected ? true : false;
+  }
+  async checkExpired() {
+    const reservations = await this.reservationRepository.find();
+    const today = getToday();
+    console.log(today, '->오늘 날짜');
+
+    reservations.map((reservation) => {
+      //결제한 날짜 가져오기
+      const ResDate = reservation.date;
+      //결제한 날짜로부터 한달인 날보기
+      let [year, month, date] = ResDate.split('-');
+      if (Number(month) + 1 >= 12) {
+        year = `${Number(year) + 1}`;
+        month = `${Number(month) % 12}`;
+        date = date;
+      } else {
+        month = `${Number(month) + 1}`;
+      }
+      const compareDate = [year, month, date].join('-');
+      console.log(compareDate, '->만료되는 날짜');
+
+      //만약 한달이 지난게 오늘이라면 state변경하고 삭제하기
+      if (compareDate === today) {
+        this.reservationRepository.save({
+          ...reservation,
+          state: 'EXPIRED',
+        });
+
+        this.reservationRepository.softDelete({
+          resID: reservation.resID,
+          store: { storeID: reservation.store.storeID },
+        });
+      }
+    });
+    return '데이터 확인 완료';
   }
 }

@@ -22,8 +22,10 @@ export class ReviewesResolver {
   @Query(() => [Review])
   fetchStoreReviewes(
     @Args('storeID') storeID: string, //
+    @Args({ name: 'order', defaultValue: 'DESC', nullable: true })
+    order: string,
   ) {
-    return this.reviewesService.findStoreReview({ storeID });
+    return this.reviewesService.findStoreReview({ storeID, order });
   }
 
   @UseGuards(GqlAuthAccessGuard)

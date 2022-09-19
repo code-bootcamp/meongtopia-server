@@ -12,6 +12,7 @@ import { Storage } from '@google-cloud/storage';
 import { getToday } from 'src/commons/utils/utils';
 import coolsms from 'coolsms-node-sdk';
 import { Cache } from 'cache-manager';
+import * as bcrypt from 'bcrypt';
 
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -52,8 +53,9 @@ export class UsersService {
     });
   }
 
-  async create({ hashedPassword: password, role, access, ...createUserInput }) {
+  async create({ role, access, ...createUserInput }) {
     const { name, email, phone, ...rest } = createUserInput;
+    const password = await bcrypt.hash(createUserInput.password, 10.2);
     const user = await this.userRepository.findOne({
       where: { email },
     });

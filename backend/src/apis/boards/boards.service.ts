@@ -18,7 +18,7 @@ export class BoardsService {
 
   find() {
     return this.boardRepository.find({
-      relations: ['user', 'user.pick'],
+      relations: ['user', 'user.pick', 'boardImg'],
     });
   }
 
