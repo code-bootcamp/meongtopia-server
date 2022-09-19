@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Pet } from '../pets/entities/pet.entity';
 import { Review } from '../reviewes/entities/review.entity';
 import { StoreImg } from '../storesImgs/entities/storeImg.entity';
+import { Pick } from '../storesPicks/entities/storePick.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
 import { StrLocationTag } from '../strLocationsTags/entities/strLocationTag.entity';
 import { User } from '../users/entities/user.entity';
@@ -26,6 +27,8 @@ export class StoresService {
     private readonly storeImageRepository: Repository<StoreImg>,
     @InjectRepository(StrLocationTag)
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
+    @InjectRepository(Pick)
+    private readonly pickRepository: Repository<Pick>,
   ) {}
 
   async find({ page, order }) {
@@ -37,10 +40,40 @@ export class StoresService {
     });
     return result;
   }
+
+  async findOwnerStores({ email }) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+    const result = await this.storesRepository.find({
+      where: {
+        user: { userID: user.userID },
+      },
+      relations: [
+        'locationTag',
+        'user',
+        'storeTag',
+        'storeImg',
+        'pet',
+        'reservation',
+        'reservation.user',
+      ],
+    });
+    return result;
+  }
+
   async findOne({ storeID }) {
     const result = await this.storesRepository.findOne({
       where: { storeID },
-      relations: ['locationTag', 'user', 'storeTag', 'storeImg', 'pet'],
+      relations: [
+        'locationTag',
+        'user',
+        'storeTag',
+        'storeImg',
+        'pet',
+        'reservation',
+        'reservation.user',
+      ],
     });
     return result;
   }
@@ -213,6 +246,9 @@ export class StoresService {
     const result = await this.storesRepository.softDelete(
       storeID, //
     );
+    this.pickRepository.delete({
+      store: { storeID },
+    });
 
     return result.affected ? true : false;
   }

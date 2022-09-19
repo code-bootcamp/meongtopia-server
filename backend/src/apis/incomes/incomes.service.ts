@@ -24,9 +24,9 @@ export class IncomesService {
       where: { user: { userID: user.userID } },
     });
     const result = await Promise.all(
-      stores.map((store) => {
+      stores.map(async (store) => {
         const storeID = store.storeID;
-        return this.incomeRepository.find({
+        const aaa = await this.incomeRepository.find({
           where: { store: { storeID } },
           relations: [
             'store',
@@ -37,6 +37,8 @@ export class IncomesService {
           ],
           order: { date: order },
         });
+        console.log(aaa);
+        return aaa;
       }),
     );
     return result;

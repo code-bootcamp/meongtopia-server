@@ -5,6 +5,7 @@ import { Pet } from '../pets/entities/pet.entity';
 import { Reservation } from '../reservations/entities/reservation.entity';
 import { Review } from '../reviewes/entities/review.entity';
 import { StoreImg } from '../storesImgs/entities/storeImg.entity';
+import { Pick } from '../storesPicks/entities/storePick.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
 import { StrLocationTag } from '../strLocationsTags/entities/strLocationTag.entity';
 import { User } from '../users/entities/user.entity';
@@ -23,6 +24,7 @@ import { StoresService } from './stores.service';
       StoreImg,
       StrLocationTag,
       Review,
+      Pick,
     ]),
     ElasticsearchModule.register({
       node: 'http://elasticsearch:9200',

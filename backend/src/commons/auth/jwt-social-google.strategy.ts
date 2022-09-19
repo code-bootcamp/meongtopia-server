@@ -14,10 +14,10 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   validate(accessToken, refreshToken, profile) {
     return {
       email: profile.emails[0].value,
-      hashedPassword: '12312313123312',
       name: profile.displayName,
       nickname: profile.displayName,
-      phone: '01011112222',
+      password: process.env.SOCIAL_LOGIN_PW,
+      phone: process.env.SOCIAL_LOGIN_PHONE,
     };
   }
 }

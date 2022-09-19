@@ -44,6 +44,15 @@ export class StoresResolver {
     return searchData;
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Store])
+  fetchOwnerStores(
+    @Context() context: any, //
+  ) {
+    const email = context.req.user.email;
+    return this.storesService.findOwnerStores({ email });
+  }
+
   @Query(() => [Store])
   fetchPickRank(
     @Args({ name: 'order', defaultValue: 'DESC', nullable: true })
@@ -62,7 +71,9 @@ export class StoresResolver {
   }
 
   @Query(() => Store)
-  fetchStore(@Args('storeID') storeID: string) {
+  fetchStore(
+    @Args('storeID') storeID: string, //
+  ) {
     return this.storesService.findOne({ storeID });
   }
 

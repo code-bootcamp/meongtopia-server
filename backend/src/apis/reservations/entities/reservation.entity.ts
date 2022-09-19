@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Income } from 'src/apis/incomes/entities/incomes.entity';
 import { Store } from 'src/apis/stores/entities/store.entity';
 import { User } from 'src/apis/users/entities/user.entity';
@@ -11,6 +11,17 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+export enum RESERVATION_STATE {
+  PENDING = 'PENDING',
+  CANCEL = 'CANCEL',
+  USED = 'USED',
+  EXPIRED = 'EXPIRED',
+}
+
+registerEnumType(RESERVATION_STATE, {
+  name: 'RESERVATION_STATE',
+});
 
 @Entity()
 @ObjectType()
@@ -35,6 +46,10 @@ export class Reservation {
   @Field(() => String)
   date: string;
 
+  @Column({ type: 'enum', enum: RESERVATION_STATE, default: 'PENDING' })
+  @Field(() => RESERVATION_STATE)
+  state: string;
+
   @CreateDateColumn()
   createAt: Date;
 
@@ -47,7 +62,7 @@ export class Reservation {
   user: User;
 
   @JoinColumn()
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Store, (store) => store.reservation)
   @Field(() => Store)
   store: Store;
 
