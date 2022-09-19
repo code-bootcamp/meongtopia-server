@@ -16,8 +16,8 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       email: profile.emails[0].value,
       name: profile.displayName,
       nickname: profile.displayName,
-      hashedPassword: process.env.SOCIAL_LOGIN_PW,
-      phone: process.env.SOCIAL_LOGIN_PHONE,
+      hashedPassword: 'qewr!!1234@@',
+      phone: '01000000000',
     };
   }
 }
