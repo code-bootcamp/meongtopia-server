@@ -4,6 +4,7 @@ import { Store } from 'src/apis/stores/entities/store.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
@@ -33,6 +34,9 @@ export class Reservation {
   @Column({ nullable: true })
   @Field(() => String)
   date: string;
+
+  @CreateDateColumn()
+  createAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

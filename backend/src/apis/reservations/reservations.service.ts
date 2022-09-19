@@ -20,7 +20,7 @@ export class ReservationsService {
     private readonly incomeRepository: Repository<Income>,
   ) {}
 
-  async find({ email }) {
+  async find({ email, order }) {
     const user = await this.usersRepository.findOne({
       where: { email },
     });
@@ -28,6 +28,7 @@ export class ReservationsService {
       where: { user: { userID: user.userID } },
       relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
       withDeleted: true,
+      order: { createAt: order },
     });
   }
 

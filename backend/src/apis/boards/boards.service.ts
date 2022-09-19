@@ -58,9 +58,7 @@ export class BoardsService {
     return board;
   }
 
-  async update({ email, updateBoardInput }) {
-    const { boardID, ...boardData } = updateBoardInput;
-
+  async update({ email, updateBoardInput, boardID }) {
     //유저 정보 가져오기
     const user = await this.userRepository.findOne({
       where: { email },
@@ -86,11 +84,13 @@ export class BoardsService {
 
     const board = await this.boardRepository.save({
       ...beforeBoard,
-      ...boardData,
+      ...updateBoardInput,
       user,
     });
+
     console.log(board);
     console.log(board.boardImg);
+
     const newBoardImg = board.boardImg;
     for (let i = 0; i < newBoardImg.length; i++) {
       const url = newBoardImg[i];

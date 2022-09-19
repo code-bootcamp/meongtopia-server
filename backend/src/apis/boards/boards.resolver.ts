@@ -51,12 +51,12 @@ export class BoardsResolver {
   @Mutation(() => Board)
   updateBoard(
     @Context() context: any, //
-    // @Args('boardID') boardID: string,
+    @Args('boardID') boardID: string,
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
   ) {
     //게시글 내용 수정
     const email = context.req.user.email;
-    return this.boardsService.update({ email, updateBoardInput });
+    return this.boardsService.update({ email, updateBoardInput, boardID });
   }
 
   @UseGuards(GqlAuthAccessGuard)

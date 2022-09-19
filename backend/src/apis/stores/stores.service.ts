@@ -129,23 +129,31 @@ export class StoresService {
     // }
   }
 
-  async update({ email, updateStoreInput }) {
+  async update({ email, updateStoreInput, storeID }) {
     try {
       const user = await this.usersRepository.findOne({
         where: { email },
       });
-      const beforeStore = await this.storesRepository.findOne({
-        where: { user: { userID: user.userID } },
+      console.log('======= User =======');
+      console.log(user);
+
+      const result1 = await this.storesRepository.softDelete({
+        storeID: storeID,
       });
-      this.storesRepository.softDelete({
-        storeID: beforeStore.storeID,
+      console.log('=======store softDelete========');
+      console.log(result1.affected ? true : false);
+
+      const result2 = await this.petRepository.delete({
+        store: { storeID },
       });
-      this.petRepository.delete({
-        store: { storeID: beforeStore.storeID },
+      console.log('====pet delete======');
+      console.log(result2.affected ? true : false);
+
+      const result3 = await this.storeImageRepository.delete({
+        store: { storeID },
       });
-      this.storeImageRepository.delete({
-        store: { storeID: beforeStore.storeID },
-      });
+      console.log('=====storeImg delete======');
+      console.log(result3.affected ? true : false);
 
       const { pet, storeImg, storeTag, locationTag, ...store } =
         updateStoreInput;
@@ -174,6 +182,8 @@ export class StoresService {
         ...store,
       });
 
+      console.log('=====newStore Data=======');
+      console.log(storeData);
       //펫 이미지 테이블에 저장
       for (let i = 0; i < pet.length; i++) {
         await this.petRepository.save({
@@ -198,15 +208,7 @@ export class StoresService {
     }
   }
 
-  async delete({ email }) {
-    const user = await this.usersRepository.findOne({
-      where: { email },
-    });
-    const store = await this.storesRepository.findOne({
-      where: { user },
-    });
-    //가게 uuid 가져오기
-    const storeID = store.storeID;
+  async delete({ storeID }) {
     //soft delete 진행
     const result = await this.storesRepository.softDelete(
       storeID, //

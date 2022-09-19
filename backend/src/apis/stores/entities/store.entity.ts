@@ -10,12 +10,10 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  // JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
-  // OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -87,12 +85,6 @@ export class Store {
   @ManyToOne(() => StrLocationTag)
   @Field(() => StrLocationTag)
   locationTag: StrLocationTag;
-
-  //배포할때
-  // @JoinColumn()
-  // @OneToOne(() => User)
-  // @Field(() => User)
-  // user: User;
 
   @JoinColumn()
   @OneToMany(() => StoreImg, (storeImg) => storeImg.store)
