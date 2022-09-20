@@ -125,7 +125,7 @@ export class StoresService {
 
     const { pet, storeImg, storeTag, locationTag, ...store } = createStoreInput;
 
-    //다대다 태그 저장
+    //태그 저장
     const tag = [];
     for (let i = 0; i < storeTag.length; i++) {
       const tagIs = await this.storeTagsRepository.findOne({
@@ -133,15 +133,14 @@ export class StoresService {
       });
       tag.push(tagIs);
     }
-
+    // 지역태그 저장
     const locationTagData = await this.StrLocationTagRepository.findOne({
       where: { name: locationTag },
     });
-    // if (!locationTagData) {
-    //   throw new ConflictException('해당 지역 태그가 없습니다.');
-    // }
+    if (!locationTagData) {
+      throw new ConflictException('해당 지역 태그가 없습니다.');
+    }
 
-    //일대일 정보 저장
     const storeData = await this.storesRepository.save({
       user,
       locationTag: locationTagData,
@@ -174,35 +173,31 @@ export class StoresService {
   }
 
   async update({ email, updateStoreInput, storeID }) {
-    try {
-      const user = await this.usersRepository.findOne({
-        where: { email },
-      });
-      console.log('======= User =======');
-      console.log(user);
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+    const { pet, storeImg, storeTag, locationTag, ...storeInput } =
+      updateStoreInput;
 
-      const result1 = await this.storesRepository.softDelete({
-        storeID: storeID,
-      });
-      console.log('=======store softDelete========');
-      console.log(result1.affected ? true : false);
+    //가게의 기존 정보 가져오기
+    let storeData = await this.storesRepository.findOne({
+      where: {
+        user: { userID: user.userID },
+        storeID,
+      },
+    });
+    // let storeData;
 
-      const result2 = await this.petRepository.delete({
-        store: { storeID },
-      });
-      console.log('====pet delete======');
-      console.log(result2.affected ? true : false);
-
-      const result3 = await this.storeImageRepository.delete({
-        store: { storeID },
-      });
-      console.log('=====storeImg delete======');
-      console.log(result3.affected ? true : false);
-
-      const { pet, storeImg, storeTag, locationTag, ...store } =
-        updateStoreInput;
-
-      //다대다 태그 저장
+    //1. 태그 저장하기
+    if (storeTag) {
+      //1-1 태그 정보 삭제하기 (중간테이블에서 연결되어 있던걸 끊어주기)
+      await this.dataSource.manager
+        .createQueryBuilder()
+        .delete()
+        .from('store_store_tag_store_tag')
+        .where('storeStoreID = :storeStoreID', { storeStoreID: storeID })
+        .execute();
+      //1-2 태그 정보 생성하기
       const tag = [];
       for (let i = 0; i < storeTag.length; i++) {
         const tagIs = await this.storeTagsRepository.findOne({
@@ -210,34 +205,57 @@ export class StoresService {
         });
         tag.push(tagIs);
       }
+      storeData = await this.storesRepository.save({
+        ...storeData,
+        user,
+        storeTag: tag,
+      });
+    }
 
-      const locationTagData = await this.StrLocationTagRepository.findOne({
+    //2. 지역 태그 저장하기
+    if (locationTag) {
+      //2-1. 지역 태그 정보 가져오기
+      const locationTagData: any = await this.StrLocationTagRepository.findOne({
         where: { name: locationTag },
       });
-      // if (!locationTagData) {
-      //   throw new ConflictException('해당 지역 태그가 없습니다.');
-      // }
-
-      //일대일 정보 저장
-      const storeData = await this.storesRepository.save({
+      if (!locationTagData) {
+        throw new ConflictException('해당 지역 태그가 없습니다.');
+      }
+      storeData = await this.storesRepository.save({
+        ...storeData,
         user,
         locationTag: locationTagData,
-        storeTag: tag,
-        ...store,
       });
+    }
 
-      console.log('=====newStore Data=======');
-      console.log(storeData);
-      //펫 이미지 테이블에 저장
+    //3. 가게 정보 저장하기
+    storeData = await this.storesRepository.save({
+      ...storeData,
+      ...storeInput,
+    });
+
+    //4. 펫 저장하기
+    if (pet) {
+      //4-1기존 펫 정보 삭제하기
+      this.petRepository.delete({
+        store: { storeID },
+      });
+      //4-2새로운 팻 정보 저장하기
       for (let i = 0; i < pet.length; i++) {
         await this.petRepository.save({
           ...pet[i],
           store: storeData,
-          storeTag,
         });
       }
+    }
 
-      //이미지는 store 저장하고 저장
+    //5. 가게 이미지 저장하기
+    if (storeImg) {
+      //5-1. 기존 이미지 삭제
+      this.storeImageRepository.delete({
+        store: { storeID },
+      });
+      //5-1. 새로운 이미지 등록
       for (let i = 0; i < storeImg.length; i++) {
         const url = storeImg[i];
         await this.storeImageRepository.save({
@@ -245,10 +263,6 @@ export class StoresService {
           store: storeData,
         });
       }
-
-      return storeData;
-    } catch (error) {
-      throw new error();
     }
   }
 
@@ -269,7 +283,7 @@ export class StoresService {
     this.incomeRepository.delete({
       store: { storeID },
     });
-
+    //리뷰랑 리뷰답글 지우기
     const reviews = await this.reviewRepository.find({
       where: { store: { storeID } },
       relations: ['store', 'user', 'reviewRes'],

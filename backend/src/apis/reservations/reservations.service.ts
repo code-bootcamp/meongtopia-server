@@ -29,7 +29,7 @@ export class ReservationsService {
       where: { user: { userID: user.userID } },
       relations: ['store', 'store.storeImg', 'store.pet', 'store.storeTag'],
       withDeleted: true,
-      order: { date: order },
+      order: { createAt: order },
     });
   }
 
