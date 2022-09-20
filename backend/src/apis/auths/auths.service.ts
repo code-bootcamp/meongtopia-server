@@ -12,12 +12,21 @@ export class AuthService {
     private readonly cacheManager: Cache,
   ) {}
 
-  async setRefreshToken({ user, res }) {
+  async setRefreshToken({ user, res, req }) {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.userID },
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    const originList = [
+      'http://localhost:3000',
+      'http://meongtopia.shop',
+      'https://meongtopia.shop',
+    ];
+    const origin = req.headers.origin;
+    if (originList.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader(
       'Access-Control-Allow-Methods', //
@@ -69,7 +78,7 @@ export class AuthService {
       });
 
     //3. 로그인하기(accessToken 만들어서 프론트 주기)
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
     res.redirect(
       //redirect는 페이지를 전환하세요를 의미.
       // 'http://localhost:5500/frontend/login/index.html', //-> 백에서 테스트 할때,
