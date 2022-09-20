@@ -112,7 +112,7 @@ export class StoresResolver {
     return this.storesService.update({ email, updateStoreInput, storeID });
   }
 
-  @UseGuards(GqlAuthAccessGuard)
+  // @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteStore(
     @Args('storeID') storeID: string, //

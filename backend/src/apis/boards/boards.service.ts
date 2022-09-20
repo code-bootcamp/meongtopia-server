@@ -16,9 +16,12 @@ export class BoardsService {
     private readonly boardImgRepository: Repository<BoardImg>,
   ) {}
 
-  find() {
+  find({ page, order }) {
     return this.boardRepository.find({
       relations: ['user', 'user.pick', 'boardImg'],
+      skip: (page - 1) * 10,
+      take: 10,
+      order: { createAt: order },
     });
   }
 

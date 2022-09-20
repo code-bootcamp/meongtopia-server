@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Income } from '../incomes/entities/incomes.entity';
 import { Pet } from '../pets/entities/pet.entity';
 import { Reservation } from '../reservations/entities/reservation.entity';
 import { Review } from '../reviewes/entities/review.entity';
+import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
 import { StoreImg } from '../storesImgs/entities/storeImg.entity';
 import { Pick } from '../storesPicks/entities/storePick.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
@@ -19,12 +21,14 @@ import { StoresService } from './stores.service';
       Store, //
       User,
       Reservation,
+      ReviewResponse,
       StoreTag,
       Pet,
       StoreImg,
       StrLocationTag,
       Review,
       Pick,
+      Income,
     ]),
     ElasticsearchModule.register({
       node: 'http://elasticsearch:9200',

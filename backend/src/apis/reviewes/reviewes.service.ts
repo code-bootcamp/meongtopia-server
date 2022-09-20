@@ -86,24 +86,16 @@ export class ReviewesService {
     return review;
   }
 
-  async update({ email, updateReviewInput, storeID }) {
+  async update({ email, updateReviewInput, reviewID }) {
     const user: any = await this.userRepository.findOne({
       where: { email },
     });
-    const store: any = await this.storeRepository.findOne({
-      where: { storeID },
-      relations: ['locationTag', 'user', 'storeTag'],
-    });
-    if (!store) {
-      throw new ConflictException('해당 가게 정보가 없습니다.');
-    }
     const review = await this.reviewRepository.findOne({
       where: {
         user: { userID: user.userID },
-        store: { storeID: store.storeID },
+        reviewID,
       },
     });
-
     const result = await this.reviewRepository.save({
       ...review,
       ...updateReviewInput,
@@ -115,9 +107,21 @@ export class ReviewesService {
     const user: any = await this.userRepository.findOne({
       where: { email },
     });
+    //어떤 리뷰인지 찾기
+    const review = await this.reviewRepository.findOne({
+      where: { user: { userID: user.userID } },
+      relations: ['store', 'reviewRes'],
+    });
+
+    //리뷰 답글 지우기
+    this.reviewResponseRepository.delete({
+      reviewResID: review.reviewRes.reviewResID,
+    });
+    //리뷰지우기
     const result = await this.reviewRepository.softDelete({
       user: { userID: user.userID },
     });
+
     return result.affected ? true : false;
   }
 

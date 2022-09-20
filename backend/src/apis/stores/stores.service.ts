@@ -1,8 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Income } from '../incomes/entities/incomes.entity';
 import { Pet } from '../pets/entities/pet.entity';
+import { Reservation } from '../reservations/entities/reservation.entity';
 import { Review } from '../reviewes/entities/review.entity';
+import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
 import { StoreImg } from '../storesImgs/entities/storeImg.entity';
 import { Pick } from '../storesPicks/entities/storePick.entity';
 import { StoreTag } from '../storesTags/entities/storeTag.entity';
@@ -29,6 +32,14 @@ export class StoresService {
     private readonly StrLocationTagRepository: Repository<StrLocationTag>,
     @InjectRepository(Pick)
     private readonly pickRepository: Repository<Pick>,
+    @InjectRepository(Income)
+    private readonly incomeRepository: Repository<Income>,
+    @InjectRepository(Reservation)
+    private readonly reservationRepository: Repository<Reservation>,
+    @InjectRepository(ReviewResponse)
+    private readonly reviewResponseRepository: Repository<ReviewResponse>,
+
+    private readonly dataSource: DataSource,
   ) {}
 
   async find({ page, order }) {
@@ -242,13 +253,60 @@ export class StoresService {
   }
 
   async delete({ storeID }) {
-    //soft delete 진행
+    // soft delete 진행
     const result = await this.storesRepository.softDelete(
       storeID, //
     );
     this.pickRepository.delete({
       store: { storeID },
     });
+    this.petRepository.delete({
+      store: { storeID },
+    });
+    this.storeImageRepository.delete({
+      store: { storeID },
+    });
+    this.incomeRepository.delete({
+      store: { storeID },
+    });
+
+    const reviews = await this.reviewRepository.find({
+      where: { store: { storeID } },
+      relations: ['store', 'user', 'reviewRes'],
+    });
+
+    for (let i = 0; i < reviews.length; i++) {
+      this.reviewResponseRepository.delete({
+        reviewResID: reviews[i].reviewRes.reviewResID,
+      });
+    }
+
+    this.reviewRepository.delete({
+      store: { storeID },
+    });
+
+    const reservation = await this.reservationRepository.find({
+      where: { store: { storeID } },
+    });
+    //예약 삭제전에 상태를 취소로 바꾸기
+    for (let i = 0; i < reservation.length; i++) {
+      this.reservationRepository.save({
+        ...reservation[i],
+        state: 'CANCEL',
+      });
+    }
+    //예약 내역삭제
+    this.reservationRepository.delete({
+      store: { storeID },
+    });
+
+    // 중간테이블에서 스토어 정보 삭제
+    await this.dataSource.manager
+      .createQueryBuilder()
+      .delete()
+      .from('store_store_tag_store_tag')
+      .where('storeStoreID = :storeStoreID', { storeStoreID: storeID })
+      .execute();
 
     return result.affected ? true : false;
   }
