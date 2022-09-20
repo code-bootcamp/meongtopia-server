@@ -238,7 +238,7 @@ export class ReservationsService {
     return result.affected ? true : false;
   }
 
-  // @Cron('')
+  @Cron('1 1 * * *')
   async checkExpired() {
     const reservations = await this.reservationRepository.find();
     const today = getToday();

@@ -52,11 +52,11 @@ export class ReviewesResolver {
   @Mutation(() => Review)
   updateReview(
     @Args('updateReviewInput') updateReviewInput: UpdateReviewInput, //
-    @Args('storeID') storeID: string,
+    @Args('reviewID') reviewID: string,
     @Context() context: any, //
   ) {
     const email = context.req.user.email;
-    return this.reviewesService.update({ updateReviewInput, email, storeID });
+    return this.reviewesService.update({ updateReviewInput, email, reviewID });
   }
 
   @UseGuards(GqlAuthAccessGuard)

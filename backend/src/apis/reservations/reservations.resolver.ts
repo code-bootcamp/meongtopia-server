@@ -70,10 +70,4 @@ export class ReservationsResolver {
   ) {
     return this.reservationsService.changeReservation({ resID });
   }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => String, { description: '만료 확인하는 기능' })
-  checkExpired() {
-    return this.reservationsService.checkExpired();
-  }
 }

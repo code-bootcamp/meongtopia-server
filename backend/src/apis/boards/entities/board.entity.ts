@@ -3,6 +3,7 @@ import { BoardImg } from 'src/apis/boardsImgs/entities/boardImg.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -24,6 +25,9 @@ export class Board {
   @Column()
   @Field(() => String, { nullable: true })
   contents: string;
+
+  @CreateDateColumn()
+  createAt: Date;
 
   @JoinColumn()
   @OneToMany(() => BoardImg, (boardImg) => boardImg.board)

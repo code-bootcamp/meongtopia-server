@@ -13,9 +13,18 @@ export class BoardsResolver {
   ) {}
 
   @Query(() => [Board])
-  fetchBoards() {
+  fetchBoards(
+    @Args({ name: 'page', defaultValue: 1, nullable: true }) page: number, //
+    @Args({
+      name: 'order',
+      defaultValue: 'ASC',
+      nullable: true,
+      description: '기본은 오름차순입니다. 내림차순은 DESC를 입력해주세요',
+    })
+    order: string,
+  ) {
     //게시글 전체 불러 오기
-    return this.boardsService.find();
+    return this.boardsService.find({ page, order });
   }
 
   @UseGuards(GqlAuthAccessGuard)
