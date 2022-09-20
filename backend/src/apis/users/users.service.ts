@@ -64,7 +64,7 @@ export class UsersService {
 
     // throw new HttpException('이미 등록된 이메일입니다.', HttpStatus.CONFLICT);
     // const template = await this.createTemplate({ name, email, phone });
-    // await this.sendEmail({ email, name });
+    await this.sendEmail({ email, name });
 
     const userData = await this.userRepository.save({
       ...createUserInput,
@@ -194,7 +194,7 @@ export class UsersService {
     }
   }
   async delete({ email }) {
-    const result1 = await this.userRepository.softDelete({ email: email }); //다른 것으로도 삭제
+    const result1 = await this.userRepository.delete({ email: email }); //다른 것으로도 삭제
     return result1.affected ? true : false;
   }
 
