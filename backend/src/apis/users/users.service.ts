@@ -194,7 +194,7 @@ export class UsersService {
     }
   }
   async delete({ email }) {
-    const result1 = await this.userRepository.delete({ email: email }); //다른 것으로도 삭제
+    const result1 = await this.userRepository.softDelete({ email: email }); //다른 것으로도 삭제
     return result1.affected ? true : false;
   }
 
