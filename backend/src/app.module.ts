@@ -82,6 +82,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
         origin: [
           'http://localhost:3000',
+          'https://meongtopia.shop',
           process.env.CORS_ORIGIN_DEV,
           process.env.CORS_ORIGIN_PROD,
           // process.env.CORS_ORIGIN_TEST,
