@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'https://meongtopia.shop',
+      'https://meongtopia.site',
       process.env.CORS_ORIGIN_DEV,
       process.env.CORS_ORIGIN_PROD,
       // process.env.CORS_ORIGIN_TEST,
