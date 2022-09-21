@@ -225,17 +225,15 @@ export class ReservationsService {
       throw new UnprocessableEntityException('예약 건이 존재하지 않습니다.');
     }
     //삭제 전에 res상태 바꾸고 삭제하기
-    this.reservationRepository.save({
+    const result = await this.reservationRepository.save({
       ...reservation,
       state: 'USED',
     });
-    //삭제
-    const result = await this.reservationRepository.softDelete({
-      resID,
-      store: { storeID: reservation.store.storeID },
-    });
-
-    return result.affected ? true : false;
+    if (result) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Cron('1 1 * * *')
