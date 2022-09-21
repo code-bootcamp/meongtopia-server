@@ -19,8 +19,8 @@ export class AuthService {
     );
     const originList = [
       'http://localhost:3000',
-      'http://meongtopia.shop',
-      'https://meongtopia.shop',
+      'http://meongtopia.site',
+      'https://meongtopia.site',
     ];
     const origin = req.headers.origin;
     if (originList.includes(origin)) {
@@ -83,7 +83,7 @@ export class AuthService {
       //redirect는 페이지를 전환하세요를 의미.
       // 'http://localhost:5500/frontend/login/index.html', //-> 백에서 테스트 할때,
       // 'http://localhost:3000',
-      'https://meongtopia.shop/home',
+      'https://meongtopia.site/home',
     );
   }
 }
