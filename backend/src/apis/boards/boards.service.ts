@@ -19,8 +19,8 @@ export class BoardsService {
   find({ page, order }) {
     return this.boardRepository.find({
       relations: ['user', 'user.pick', 'boardImg'],
-      skip: (page - 1) * 10,
-      take: 10,
+      skip: (page - 1) * 6,
+      take: 6,
       order: { createAt: order },
     });
   }
