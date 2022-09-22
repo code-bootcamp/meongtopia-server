@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Review } from 'src/apis/reviewes/entities/review.entity';
+import { ReviewResponse } from 'src/apis/reviewesResponses/entities/reviewResponse.entity';
 import { Pick } from 'src/apis/storesPicks/entities/storePick.entity';
 // import { Store } from 'src/apis/stores/entities/store.entity';
 import {
@@ -103,4 +104,8 @@ export class User {
   @OneToMany(() => Review, (review) => review.user)
   @Field(() => [Review])
   review: Review[];
+
+  @OneToMany(() => ReviewResponse, (reviewRes) => reviewRes.user)
+  @Field(() => [ReviewResponse])
+  reviewRes: ReviewResponse[];
 }

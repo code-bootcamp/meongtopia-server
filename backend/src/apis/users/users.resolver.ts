@@ -13,11 +13,13 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserInput } from './dto/createUser.input';
 
 import { Cache } from 'cache-manager';
+import { ReservationsService } from '../reservations/reservations.service';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
+    private readonly reservationsService: ReservationsService,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
