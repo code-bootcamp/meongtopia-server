@@ -12,8 +12,21 @@ import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { AuthController } from './auths.controller';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
+import { Review } from '../reviewes/entities/review.entity';
+import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
+import { Board } from '../boards/entities/board.entity';
+import { BoardImg } from '../boardsImgs/entities/boardImg.entity';
 @Module({
-  imports: [JwtModule.register({}), TypeOrmModule.forFeature([User])],
+  imports: [
+    JwtModule.register({}),
+    TypeOrmModule.forFeature([
+      User, //
+      Review,
+      ReviewResponse,
+      Board,
+      BoardImg,
+    ]),
+  ],
   providers: [
     JwtAccessStrategy,
     JwtRefreshStrategy,

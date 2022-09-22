@@ -14,12 +14,24 @@ import coolsms from 'coolsms-node-sdk';
 import { Cache } from 'cache-manager';
 
 import { MailerService } from '@nestjs-modules/mailer';
+import { Review } from '../reviewes/entities/review.entity';
+import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
+import { Board } from '../boards/entities/board.entity';
+import { BoardImg } from '../boardsImgs/entities/boardImg.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Review)
+    private readonly reviewRepository: Repository<Review>,
+    @InjectRepository(ReviewResponse)
+    private readonly reviewResponseRepository: Repository<ReviewResponse>,
+    @InjectRepository(Board)
+    private readonly boardRepository: Repository<Board>,
+    @InjectRepository(BoardImg)
+    private readonly boardImgRepository: Repository<BoardImg>,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
     private readonly mailerService: MailerService,
@@ -121,7 +133,39 @@ export class UsersService {
     }
   }
   async delete({ email }) {
-    const result1 = await this.userRepository.softDelete({ email: email }); //다른 것으로도 삭제
+    //유저 정보 찾기
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new ConflictException('해당 유저가 존재하지 않습니다.');
+    }
+    //리뷰 지우기
+    this.reviewRepository.delete({
+      user: { userID: user.userID },
+    });
+    //리뷰 댓글 지우기
+    this.reviewResponseRepository.delete({
+      user: { userID: user.userID },
+    });
+    const boards = await this.boardRepository.find({
+      where: {
+        user: { userID: user.userID },
+      },
+    });
+    //게시글 이미지 지우기
+    for (let i = 0; i < boards.length; i++) {
+      const board = boards[i];
+      this.boardImgRepository.delete({
+        boardImgID: board.boardID,
+      });
+    }
+    this.boardRepository.delete({
+      user: { userID: user.userID },
+    });
+    //유저에 연결된 정보 삭제
+    const result1 = await this.userRepository.softDelete({ email: email });
+
     return result1.affected ? true : false;
   }
 

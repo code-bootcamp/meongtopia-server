@@ -65,6 +65,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      // playground:false,
+      // debug:false
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
@@ -78,13 +80,7 @@ import { ScheduleModule } from '@nestjs/schedule';
           'Accept',
         ],
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
-        origin: [
-          'http://localhost:3000',
-          'https://meongtopia.site',
-          process.env.CORS_ORIGIN_DEV,
-          process.env.CORS_ORIGIN_PROD,
-          // process.env.CORS_ORIGIN_TEST,
-        ],
+        origin: ['http://localhost:3000', 'https://meongtopia.site'],
       },
     }),
     TypeOrmModule.forRoot({
