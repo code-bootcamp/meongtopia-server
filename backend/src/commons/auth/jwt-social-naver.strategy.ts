@@ -13,8 +13,8 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
   validate(accessToken, refreshToken, profile) {
     return {
       email: profile._json.email,
-      name: profile.displayName,
-      nickname: profile.displayName,
+      name: profile._json.nickname,
+      nickname: profile._json.nickname,
       hashedPassword: 'qewr!!1234@@',
       phone: '01000000000',
     };
