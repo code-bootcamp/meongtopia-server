@@ -17,7 +17,7 @@ export class BoardsResolver {
     @Args({ name: 'page', defaultValue: 1, nullable: true }) page: number, //
     @Args({
       name: 'order',
-      defaultValue: 'ASC',
+      defaultValue: 'DESC',
       nullable: true,
       description: '기본은 오름차순입니다. 내림차순은 DESC를 입력해주세요',
     })

@@ -20,8 +20,6 @@ export class IamportService {
         },
       });
       const { access_token } = token.data.response;
-      console.log('=====access_token=======');
-      console.log(access_token);
       return access_token;
     } catch (error) {
       throw new HttpException(
@@ -42,7 +40,6 @@ export class IamportService {
       });
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
 
-      console.log(paymentData);
       return paymentData;
     } catch (error) {
       throw new HttpException(

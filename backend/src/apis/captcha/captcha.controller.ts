@@ -36,7 +36,6 @@ export class CaptchaController {
         res.end(key);
       } else {
         res.status(response.statusCode).end();
-        console.log('error = ' + response.statusCode);
       }
     });
   }

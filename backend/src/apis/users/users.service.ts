@@ -12,7 +12,6 @@ import { Storage } from '@google-cloud/storage';
 import { getToday } from 'src/commons/utils/utils';
 import coolsms from 'coolsms-node-sdk';
 import { Cache } from 'cache-manager';
-import * as bcrypt from 'bcrypt';
 
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -61,9 +60,6 @@ export class UsersService {
     if (user) {
       throw new ConflictException('이미 등록된 이메일입니다');
     }
-
-    // throw new HttpException('이미 등록된 이메일입니다.', HttpStatus.CONFLICT);
-    // const template = await this.createTemplate({ name, email, phone });
     await this.sendEmail({ email, name });
 
     const userData = await this.userRepository.save({
@@ -76,32 +72,7 @@ export class UsersService {
     return userData;
   }
 
-  // createTemplate({ name, email, phone }) {
-  //   //템플릿 만드는 과정
-  //   const mytemplate = `
-  //   <html>
-  //       <body>
-  //           <div style="display: flex; flex-direction: column; align-items: center;">
-  //           <div style="width: 500px;">
-  //               <h1>${name}님 가입을 환영합니다!!!</h1>
-  //               <hr />
-  //               <div style="color: red;">이름: ${name}</div>
-  //               <div>email: ${email}살</div
-  //               <div>personal: ${phone}</div>
-  //               <div>가입일: ${getToday()}</div>
-  //           </div>
-  //           </div>
-  //       </body>
-  //   </html>
-  //   `;
-  //   return mytemplate;
-  // }
-
   async update({ email, updateUserInput }) {
-    /*this.productRepository.update(
-            { id: productId },
-            { ...updateProductInput },
-          );*/
     const myuser = await this.userRepository.findOne({
       where: { email: email },
     });
@@ -115,13 +86,11 @@ export class UsersService {
   }
 
   async updatePwd({ email, hashedPassword: newhashedPassword }) {
-    console.log('service========', email);
     try {
       const myuser = await this.userRepository.findOne({
         where: { email: email },
       });
-      //const에 담을 필요가 있는가?
-      const result = await this.userRepository.save({
+      await this.userRepository.save({
         ...myuser,
         password: newhashedPassword,
       });
@@ -131,53 +100,11 @@ export class UsersService {
     }
   }
 
-  async upload({ files, email }) {
-    // 파일을 클라우드 스토리지에 저장하는 로직
-
-    //스토리지 저장 필요 yarn add google-cloud/storage
-    // const aaa = await files[0];
-    const waitedfiles = await Promise.all(files);
-
-    //console.log(aaa);
-    const bucket = process.env.BUCKET;
-    const storage = new Storage({
-      projectId: process.env.GCP_PROJECT_ID,
-      keyFilename: process.env.GCP_PROJECT_KEY_FILENAME,
-    }).bucket(bucket);
-
-    const imagefileurl = await Promise.all(
-      waitedfiles.map(
-        (el) =>
-          new Promise((resolve, reject) => {
-            el.createReadStream()
-              .pipe(storage.file(el.filename).createWriteStream())
-              .on('finish', () =>
-                resolve(`${bucket}/profileURL/${el.filename}`),
-              )
-              .on('error', () => reject('실패'));
-          }),
-      ),
-    );
-    const imgUrl: any = imagefileurl[0];
-
-    const myuser = await this.userRepository.findOne({
-      where: { email: email },
-    });
-
-    await this.userRepository.save({
-      ...myuser,
-      email: email,
-      profileImgUrl: imgUrl,
-    });
-    return imgUrl;
-  }
-
   async deleteprofile({ email }) {
     const bucket = process.env.bucket;
     const user = await this.userRepository.findOne({ where: { email: email } });
     const prevImg = user.profileImgUrl.split(`${bucket}/${getToday()}`);
     const prevImgName = prevImg[prevImg.length - 1];
-    console.log(prevImg, '======');
 
     const storage = new Storage({
       projectId: process.env.GCP_PROJECT_ID,
@@ -247,7 +174,7 @@ export class UsersService {
       count,
       '0',
     );
-    const aaa = await this.mailerService
+    await this.mailerService
       .sendMail({
         to: email,
         from: EMAIL_USER,
@@ -255,9 +182,8 @@ export class UsersService {
         html: '6자리 인증 코드 : ' + `<b> ${token}</b>`, // The `.pug` or `.hbs` extension is appended automatically.
       })
       .catch((err) => {
-        console.log(err);
+        throw new err();
       });
-    console.log(aaa);
     return token;
   }
 
@@ -281,7 +207,7 @@ export class UsersService {
     </html>
     `;
 
-    const aaa = await this.mailerService
+    await this.mailerService
       .sendMail({
         to: email,
         from: EMAIL_USER,
@@ -290,15 +216,13 @@ export class UsersService {
         // html: `<b> ${name}님 가입을 환영합니다.</b>`, // The `.pug` or `.hbs` extension is appended automatically.
       })
       .catch((err) => {
-        console.log(err);
+        throw new err();
       });
-    console.log(aaa);
     return true;
   }
 
   checkValidationPhone({ phone }) {
     if (phone.length !== 10 && phone.length !== 11) {
-      console.log('에러 발생!!! 핸드폰 번호를 제대로 입력해 주세요!!!');
       return false;
     } else {
       return true;

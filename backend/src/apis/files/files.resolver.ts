@@ -16,6 +16,7 @@ export class FilesResolver {
     // console.log(files);
     return this.filesService.upload({ files });
   }
+
   @Mutation(() => String)
   uploadOneFile(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: FileUpload, // graphql과 typescript 두개다 데이터 타입을 지정

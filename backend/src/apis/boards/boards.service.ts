@@ -91,9 +91,6 @@ export class BoardsService {
       user,
     });
 
-    console.log(board);
-    console.log(board.boardImg);
-
     const newBoardImg = board.boardImg;
     for (let i = 0; i < newBoardImg.length; i++) {
       const url = newBoardImg[i];
