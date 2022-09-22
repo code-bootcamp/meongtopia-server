@@ -28,8 +28,7 @@ export class StoresResolver {
 
     const storeES = await this.elasticsearchService.search({
       index: 'myproduct10',
-      // 배포시
-      // index: 'search.v1',
+
       query: {
         term: { name: search },
       },
@@ -37,8 +36,6 @@ export class StoresResolver {
     const searchData = storeES.hits.hits.map(async (row) => {
       const storeID = row._id;
       return await this.storesService.findOne({ storeID });
-      // console.log(result);
-      // return result;
     });
     await this.cacheManager.set(`store:${search}`, searchData, { ttl: 30 });
     return searchData;

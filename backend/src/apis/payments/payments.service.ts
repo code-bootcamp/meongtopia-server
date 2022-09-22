@@ -30,16 +30,11 @@ export class PaymentService {
 
     try {
       //1. payment 테이블에 거래기록 한줄 생성
-      console.log('payment service ');
-      console.log(impUid, amount, _user);
       //유저 정보 불러오기
       const user = await queryRunner.manager.findOne(User, {
         where: { email: _user.email },
         lock: { mode: 'pessimistic_write' },
       });
-
-      console.log('=====user 정보 ======');
-      console.log(user);
 
       const payment = this.paymentRepository.create({
         impUid: impUid,
