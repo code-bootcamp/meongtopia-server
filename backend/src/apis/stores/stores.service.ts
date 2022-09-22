@@ -69,6 +69,7 @@ export class StoresService {
         'reservation',
         'reservation.user',
       ],
+      withDeleted: true,
     });
     return result;
   }
