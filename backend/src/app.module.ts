@@ -12,7 +12,6 @@ import { StoresPicksModule } from './apis/storesPicks/storesPicks.module';
 import { StrLocationsTagsModule } from './apis/strLocationsTags/strLocationsTags.module';
 import { ReviewesModule } from './apis/reviewes/reviewes.module';
 import { ReviewesResponsesModule } from './apis/reviewesResponses/reviewesResponses.module';
-import { PetsModule } from './apis/pets/pets.module';
 import { AuthModule } from './apis/auths/auths.module';
 import { FilesModule } from './apis/files/files.module';
 import { ReservationsModule } from './apis/reservations/reservations.module';
@@ -25,7 +24,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    PetsModule,
     ReservationsModule,
     ReviewesModule,
     ReviewesResponsesModule,

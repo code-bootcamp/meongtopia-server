@@ -10,7 +10,6 @@ import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserInput } from './dto/updateUser.input';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CreateUserInput } from './dto/createUser.input';
 
 import { Cache } from 'cache-manager';
@@ -95,20 +94,6 @@ export class UsersResolver {
   ) {
     //수정하기
     return this.usersService.update({ email, updateUserInput });
-  }
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => String)
-  async uploadFile(
-    @Context() context: any, //
-    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload, //
-  ) {
-    const email = context.req.user.email;
-    console.log(email);
-    return await this.usersService.upload({
-      files,
-      email,
-    });
   }
 
   @UseGuards(GqlAuthAccessGuard)

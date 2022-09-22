@@ -29,7 +29,6 @@ export class StoresPicksService {
         relations: ['locationTag', 'storeImg', 'pet', 'user', 'storeTag'],
       });
     });
-    console.log(result);
     return result;
   }
 
