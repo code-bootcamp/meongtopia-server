@@ -20,9 +20,13 @@
 애견카페의 운영자들에겐 카페 정보를 더 편리하게 등록하고 홍보를 할 수 있는 플랫폼입니다.
 
 <div align=center><h2>📚 기술스택</h2></div>
+<img src="https://cdn.discordapp.com/attachments/1010070894116347905/1022393027530076260/c0b04cd060d35d9b.jpg">
+
+## Flow Chart
+<img src="https://cdn.discordapp.com/attachments/1010070894116347905/1022120847336546324/4743432624aeeb32.jpg">
 
 ## ERD
-<img src="https://cdn.discordapp.com/attachments/1012196150989828097/1021302903052443688/Team02-dogCafe.png">
+<img src="https://cdn.discordapp.com/attachments/1010070894116347905/1022393120488439868/erd.jpg">
 
 ## Directory Structure
 
@@ -237,6 +241,7 @@ git config --global alias.tree '! git ls-tree --full-name --name-only -t -r HEAD
 ## Backend 역할<h3>박성운</h3>
 <div>
   <li>Git 관리</li>
+  <li>ERD 설계</li>
   <li>API 생성 및 구성</li>
   <li>로그인 API 생성 및 구성</li>
   <li>핸드폰, 이메일 API 생성 및 구성</li>
@@ -245,6 +250,7 @@ git config --global alias.tree '! git ls-tree --full-name --name-only -t -r HEAD
 <h3 style="margin-top: 30px;">설하나</h3>
 <div>
   <li>ERD 설계</li>
+  <li>API 생성 및 구성</li>
   <li>API DOCS 작업</li>
   <li>배포</li>
   <li>발표자료 제작</li>
