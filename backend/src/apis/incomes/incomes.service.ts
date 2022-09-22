@@ -37,7 +37,6 @@ export class IncomesService {
           ],
           order: { date: order },
         });
-        console.log(aaa);
         return aaa;
       }),
     );

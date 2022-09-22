@@ -240,7 +240,6 @@ export class ReservationsService {
   async checkExpired() {
     const reservations = await this.reservationRepository.find();
     const today = getToday();
-    console.log(today, '->오늘 날짜');
 
     reservations.map((reservation) => {
       //결제한 날짜 가져오기
@@ -255,7 +254,6 @@ export class ReservationsService {
         month = `${Number(month) + 1}`;
       }
       const compareDate = [year, month, date].join('-');
-      console.log(compareDate, '->만료되는 날짜');
 
       //만약 한달이 지난게 오늘이라면 state변경하고 삭제하기
       if (compareDate === today) {
