@@ -118,58 +118,59 @@ export class StoresService {
     return stores;
   }
   async create({ email, createStoreInput }) {
-    // try {
-    //유저 정보 꺼내오기
-    const user = await this.usersRepository.findOne({ where: { email } });
-    // this.checkAccess({ user });
+    try {
+      // 유저 정보 꺼내오기
+      const user = await this.usersRepository.findOne({ where: { email } });
+      this.checkAccess({ user });
 
-    const { pet, storeImg, storeTag, locationTag, ...store } = createStoreInput;
+      const { pet, storeImg, storeTag, locationTag, ...store } =
+        createStoreInput;
 
-    //태그 저장
-    const tag = [];
-    for (let i = 0; i < storeTag.length; i++) {
-      const tagIs = await this.storeTagsRepository.findOne({
-        where: { name: storeTag[i] },
+      //태그 저장
+      const tag = [];
+      for (let i = 0; i < storeTag.length; i++) {
+        const tagIs = await this.storeTagsRepository.findOne({
+          where: { name: storeTag[i] },
+        });
+        tag.push(tagIs);
+      }
+      // 지역태그 저장
+      const locationTagData = await this.StrLocationTagRepository.findOne({
+        where: { name: locationTag },
       });
-      tag.push(tagIs);
-    }
-    // 지역태그 저장
-    const locationTagData = await this.StrLocationTagRepository.findOne({
-      where: { name: locationTag },
-    });
-    if (!locationTagData) {
-      throw new ConflictException('해당 지역 태그가 없습니다.');
-    }
+      if (!locationTagData) {
+        throw new ConflictException('해당 지역 태그가 없습니다.');
+      }
 
-    const storeData = await this.storesRepository.save({
-      user,
-      locationTag: locationTagData,
-      storeTag: tag,
-      ...store,
-    });
-
-    //펫 이미지 테이블에 저장
-    for (let i = 0; i < pet.length; i++) {
-      await this.petRepository.save({
-        ...pet[i],
-        store: storeData,
-        storeTag,
+      const storeData = await this.storesRepository.save({
+        user,
+        locationTag: locationTagData,
+        storeTag: tag,
+        ...store,
       });
-    }
 
-    //이미지는 store 저장하고 저장
-    for (let i = 0; i < storeImg.length; i++) {
-      const url = storeImg[i];
-      await this.storeImageRepository.save({
-        url,
-        store: storeData,
-      });
-    }
+      //펫 이미지 테이블에 저장
+      for (let i = 0; i < pet.length; i++) {
+        await this.petRepository.save({
+          ...pet[i],
+          store: storeData,
+          storeTag,
+        });
+      }
 
-    return storeData;
-    // } catch (error) {
-    //   throw new error('가게 생성에 실패하였습니다.');
-    // }
+      //이미지는 store 저장하고 저장
+      for (let i = 0; i < storeImg.length; i++) {
+        const url = storeImg[i];
+        await this.storeImageRepository.save({
+          url,
+          store: storeData,
+        });
+      }
+
+      return storeData;
+    } catch (error) {
+      throw new error('가게 생성에 실패하였습니다.');
+    }
   }
 
   async update({ email, updateStoreInput, storeID }) {
