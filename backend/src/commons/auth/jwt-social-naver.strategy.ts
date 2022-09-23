@@ -11,11 +11,12 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     });
   }
   validate(accessToken, refreshToken, profile) {
-    console.log(profile);
+    const email = profile._json.email;
+    const id = email.split('@')[0];
     return {
       email: profile._json.email,
-      name: profile._json.nickname,
-      nickname: profile._json.nickname,
+      name: id,
+      nickname: id,
       hashedPassword: 'qewr!!1234@@',
       phone: '01000000000',
     };
