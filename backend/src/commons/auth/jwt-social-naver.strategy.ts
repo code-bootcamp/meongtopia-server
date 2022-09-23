@@ -11,6 +11,7 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     });
   }
   validate(accessToken, refreshToken, profile) {
+    console.log(profile);
     return {
       email: profile._json.email,
       name: profile._json.nickname,
