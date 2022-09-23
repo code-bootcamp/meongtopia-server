@@ -65,8 +65,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      // playground:false,
-      // debug:false
+      playground: false,
+      debug: false,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
