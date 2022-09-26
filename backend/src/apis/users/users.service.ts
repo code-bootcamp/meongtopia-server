@@ -163,6 +163,8 @@ export class UsersService {
     this.boardRepository.delete({
       user: { userID: user.userID },
     });
+    //예약 내역지우기
+
     //유저에 연결된 정보 삭제
     const result1 = await this.userRepository.softDelete({ email: email });
 
