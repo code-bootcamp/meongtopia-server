@@ -187,8 +187,6 @@ export class StoresService {
         storeID,
       },
     });
-    // let storeData;
-
     //1. 태그 저장하기
     if (storeTag) {
       //1-1 태그 정보 삭제하기 (중간테이블에서 연결되어 있던걸 끊어주기)

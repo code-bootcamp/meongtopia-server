@@ -236,7 +236,46 @@ export class ReservationsService {
     }
   }
 
-  @Cron('1 1 * * *')
+  async cancelUserReservation({ email }) {
+    //1.유저를 찾기
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    //2.유저에 해당하는 예약내역 목록 찾기
+    const reservations = await this.reservationRepository.find({
+      where: {
+        user: { userID: user.userID },
+      },
+    });
+
+    //3. 유저에 해당하는 예약내역 목록을 돌면서 income에 반영하기
+    for (let i = 0; i < reservations.length; i++) {
+      const storeID = reservations[i].store.storeID;
+      const temp = reservations[i].date.split('-');
+      const date = `${temp[1]}/${temp[2]}`;
+      const preIconme = await this.incomeRepository.findOne({
+        where: {
+          store: { storeID },
+          date,
+        },
+      });
+      //취소 횟수 +1
+      const cancelNum = preIconme.cancelNum + 1;
+      //취소 금액 총수입에서 차감
+      const totalCash = preIconme.totalCash - reservations[i].amount;
+      this.incomeRepository.save({
+        ...preIconme,
+        cancelNum,
+        totalCash,
+      });
+    }
+    //4. 모든 예약 내역 지우기
+    this.reservationRepository.delete({
+      user: { userID: user.userID },
+    });
+  }
+
+  @Cron('0 1 * * *')
   async checkExpired() {
     const reservations = await this.reservationRepository.find();
     const today = getToday();
