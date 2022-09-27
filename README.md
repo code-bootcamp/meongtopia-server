@@ -1,5 +1,5 @@
 
-<div > 
+<div align=center > 
   <img src="https://cdn.discordapp.com/attachments/1012196150989828097/1019146948638425098/Group_57.png"> 
   <br>
 </div>
@@ -19,7 +19,7 @@
 
 애견카페의 운영자들에겐 카페 정보를 더 편리하게 등록하고 홍보를 할 수 있는 플랫폼입니다.
 
-<div align=center><h2>📚 기술스택</h2></div>
+<div><h2>📚 기술스택</h2></div>
 <img src="https://cdn.discordapp.com/attachments/1010070894116347905/1022393027530076260/c0b04cd060d35d9b.jpg">
 
 ## Flow Chart
