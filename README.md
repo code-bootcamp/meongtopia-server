@@ -241,15 +241,28 @@
   <li>Git 관리</li>
   <li>ERD 설계</li>
   <li>API 생성 및 구성</li>
+  <li>사용자 CRUD API 생성 및 구성</li>
   <li>로그인 API 생성 및 구성</li>
-  <li>핸드폰, 이메일 API 생성 및 구성</li>
+  <li>소셜로그인 API 생성 및 구성</li>
+  <li>인증번호 전송 API 생성 및 구성</li>
+  <li>이메일 전송 API 생성 및 구성</li>
+  <li>테스트 코드 작성</li>
 </div>
 
 <h3 style="margin-top: 30px;">설하나</h3>
 <div>
   <li>ERD 설계</li>
-  <li>API 생성 및 구성</li>
+  <li>매장 CRUD API 생성 및 구성</li>
+  <li>커뮤니티 CRUD API 생성 및 구성</li>
+  <li>포인트 결제 API 생성 및 구성</li>
+  <li>예약 API 생성 및 구성</li>
+  <li>수입내역 관리 API 생성 및 구성</li>
+  <li>파일 업로드 API 생성 및 구성</li>
+  <li>리뷰/리뷰 답글 CRUD API 생성 및 구성</li>
+  <li>애견 테이블 구성</li>
   <li>API DOCS 작업</li>
+  <li>Cron Tap</li>
+  <li>테스트 코드 작성</li>
   <li>배포</li>
   <li>발표자료 제작</li>
 </div>
