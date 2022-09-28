@@ -10,13 +10,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://meongtopia.site',
-      process.env.CORS_ORIGIN_DEV,
-      process.env.CORS_ORIGIN_PROD,
-      // process.env.CORS_ORIGIN_TEST,
-    ],
+    origin: ['http://localhost:3000', 'https://meongtopia.site'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: [
       'Access-Control-Allow-Headers',
