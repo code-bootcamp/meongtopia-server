@@ -103,7 +103,7 @@ export class UsersService {
   async updatePwd({ email, hashedPassword: newhashedPassword }) {
     try {
       const myuser = await this.userRepository.findOne({
-        where: { email: email },
+        where: { email },
       });
       await this.userRepository.save({
         ...myuser,
@@ -117,23 +117,37 @@ export class UsersService {
 
   async deleteprofile({ email }) {
     const bucket = process.env.bucket;
-    const user = await this.userRepository.findOne({ where: { email: email } });
-    const prevImg = user.profileImgUrl.split(`${bucket}/${getToday()}`);
+    //이전코드
+    // const user = await this.userRepository.findOne({ where: { email: email } });
+    // const prevImg = user.profileImgUrl.split(`${bucket}/${getToday()}`);
+    const preUser = await this.userRepository.findOne({
+      where: { email },
+    });
+    const prevImg = preUser.profileImgUrl.split(`${bucket}/${getToday()}`);
     const prevImgName = prevImg[prevImg.length - 1];
 
+    //버킷에서 해당 이미지 지우기
     const storage = new Storage({
       projectId: process.env.GCP_PROJECT_ID,
       keyFilename: process.env.GCP_PROJECT_KEY_FILENAME,
     });
     const result = await storage.bucket(bucket).file(prevImgName).delete();
+    console.log(result);
+    //디비에서 profileImgUrl 데이터지우기
+    this.userRepository.save({
+      ...preUser,
+      profileImgUrl: null,
+    });
+    //이미지가 제대로 지워졌는지 확인하기
+    return result ? true : false;
+    //이전코드
+    // const { profileImgUrl, ...userrest } = user;
+    // const deleteProfileUrl = { ...userrest, profileImgUrl: null };
+    // await this.userRepository.save(deleteProfileUrl);
 
-    const { profileImgUrl, ...userrest } = user;
-    const deleteProfileUrl = { ...userrest, profileImgUrl: null };
-    await this.userRepository.save(deleteProfileUrl);
-
-    if (result) {
-      return true;
-    }
+    // if (result) {
+    //   return result
+    // }
   }
   async delete({ email }) {
     //유저 정보 찾기
