@@ -1,6 +1,10 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
@@ -22,7 +26,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
       `accessToken:${accessToken}`,
     );
     if (checkToken) {
-      throw new UnauthorizedException();
+      throw new UnprocessableEntityException('로그인 후 이용해주세요');
     }
     return {
       email: payload.email,

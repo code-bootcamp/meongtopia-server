@@ -12,7 +12,7 @@ import { Storage } from '@google-cloud/storage';
 import { getToday } from 'src/commons/utils/utils';
 import coolsms from 'coolsms-node-sdk';
 import { Cache } from 'cache-manager';
-
+import { ReservationsService } from '../reservations/reservations.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Review } from '../reviewes/entities/review.entity';
 import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
@@ -32,6 +32,9 @@ export class UsersService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(BoardImg)
     private readonly boardImgRepository: Repository<BoardImg>,
+
+    private readonly reservationsService: ReservationsService,
+
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
     private readonly mailerService: MailerService,
@@ -164,7 +167,7 @@ export class UsersService {
       user: { userID: user.userID },
     });
     //예약 내역지우기
-
+    this.reservationsService.cancelUserReservation({ email });
     //유저에 연결된 정보 삭제
     const result1 = await this.userRepository.softDelete({ email: email });
 
