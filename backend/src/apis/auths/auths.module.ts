@@ -16,6 +16,10 @@ import { Review } from '../reviewes/entities/review.entity';
 import { ReviewResponse } from '../reviewesResponses/entities/reviewResponse.entity';
 import { Board } from '../boards/entities/board.entity';
 import { BoardImg } from '../boardsImgs/entities/boardImg.entity';
+import { ReservationsService } from '../reservations/reservations.service';
+import { Reservation } from '../reservations/entities/reservation.entity';
+import { Store } from '../stores/entities/store.entity';
+import { Income } from '../incomes/entities/incomes.entity';
 @Module({
   imports: [
     JwtModule.register({}),
@@ -25,6 +29,9 @@ import { BoardImg } from '../boardsImgs/entities/boardImg.entity';
       ReviewResponse,
       Board,
       BoardImg,
+      Reservation,
+      Store,
+      Income,
     ]),
   ],
   providers: [
@@ -36,6 +43,7 @@ import { BoardImg } from '../boardsImgs/entities/boardImg.entity';
     AuthResolver, //
     AuthService,
     UsersService,
+    ReservationsService,
   ],
   controllers: [
     AuthController, //
