@@ -122,11 +122,9 @@ export class StoresService {
       // 유저 정보 꺼내오기
       const user = await this.usersRepository.findOne({ where: { email } });
       this.checkAccess({ user });
-
       const { pet, storeImg, storeTag, locationTag, ...store } =
         createStoreInput;
-
-      //태그 저장
+      // 태그 저장
       const tag = [];
       for (let i = 0; i < storeTag.length; i++) {
         const tagIs = await this.storeTagsRepository.findOne({
@@ -169,7 +167,7 @@ export class StoresService {
 
       return storeData;
     } catch (error) {
-      throw new error('가게 생성에 실패하였습니다.');
+      return error;
     }
   }
 
@@ -329,7 +327,7 @@ export class StoresService {
       throw new ConflictException('해당 권한이 존재하지 않습니다.');
     }
     if ((user.access = 'PENDDING')) {
-      throw new ConflictException('아직 승인되지 않은 사용장입니다.');
+      throw new ConflictException('아직 승인되지 않은 계정입니다.');
     }
   }
 }

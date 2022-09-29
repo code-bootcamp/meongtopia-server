@@ -21,6 +21,7 @@ import { PaymentModule } from './apis/payments/payments.module';
 import { BoardsModule } from './apis/boards/boards.module';
 import { IncomesModule } from './apis/incomes/incomes.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AdminModule } from './apis/admin/admin.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     IncomesModule,
     UsersModule,
     AuthModule,
+    AdminModule,
     FilesModule,
     PaymentModule,
     BoardsModule,
