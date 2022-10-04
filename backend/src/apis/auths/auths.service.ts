@@ -36,8 +36,6 @@ export class AuthService {
       'Access-Control-Allow-Headers',
       'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
     );
-    //배포
-    // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com');
 
     res.setHeader(
       'Set-Cookie',
@@ -79,11 +77,6 @@ export class AuthService {
 
     //3. 로그인하기(accessToken 만들어서 프론트 주기)
     this.setRefreshToken({ user, res, req });
-    res.redirect(
-      //redirect는 페이지를 전환하세요를 의미.
-      // 'http://localhost:5500/frontend/login/index.html', //-> 백에서 테스트 할때,
-      // 'http://localhost:3000',
-      'https://meongtopia.site/home',
-    );
+    res.redirect('https://meongtopia.site/home');
   }
 }

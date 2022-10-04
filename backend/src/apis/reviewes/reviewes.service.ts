@@ -107,7 +107,7 @@ export class ReviewesService {
     const user: any = await this.userRepository.findOne({
       where: { email },
     });
-    //어떤 리뷰인지 찾기
+    //기존 리뷰 찾기
     const review = await this.reviewRepository.findOne({
       where: { user: { userID: user.userID } },
       relations: ['store', 'reviewRes'],
@@ -117,7 +117,7 @@ export class ReviewesService {
     this.reviewResponseRepository.delete({
       reviewResID: review.reviewRes.reviewResID,
     });
-    //리뷰지우기
+    //기존 리뷰 지우기
     const result = await this.reviewRepository.softDelete({
       user: { userID: user.userID },
     });
