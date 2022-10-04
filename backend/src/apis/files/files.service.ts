@@ -29,7 +29,7 @@ export class FilesService {
     if (results.includes('false')) {
       throw new HttpException('이미지 업로드 오류', HttpStatus.CONFLICT);
     }
-    return results; //성공하면 url, 실패하면 "실패"
+    return results;
   }
 
   async uploadOne({ file }) {

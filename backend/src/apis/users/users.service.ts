@@ -117,9 +117,6 @@ export class UsersService {
 
   async deleteprofile({ email }) {
     const bucket = process.env.bucket;
-    //이전코드
-    // const user = await this.userRepository.findOne({ where: { email: email } });
-    // const prevImg = user.profileImgUrl.split(`${bucket}/${getToday()}`);
     const preUser = await this.userRepository.findOne({
       where: { email },
     });
@@ -140,14 +137,6 @@ export class UsersService {
     });
     //이미지가 제대로 지워졌는지 확인하기
     return result ? true : false;
-    //이전코드
-    // const { profileImgUrl, ...userrest } = user;
-    // const deleteProfileUrl = { ...userrest, profileImgUrl: null };
-    // await this.userRepository.save(deleteProfileUrl);
-
-    // if (result) {
-    //   return result
-    // }
   }
   async delete({ email }) {
     //유저 정보 찾기
@@ -242,7 +231,8 @@ export class UsersService {
         to: email,
         from: EMAIL_USER,
         subject: '인증 번호입니다.',
-        html: '6자리 인증 코드 : ' + `<b> ${token}</b>`, // The `.pug` or `.hbs` extension is appended automatically.
+        // The `.pug` or `.hbs` extension is appended automatically.
+        html: '6자리 인증 코드 : ' + `<b> ${token}</b>`,
       })
       .catch((err) => {
         throw new err();
@@ -276,7 +266,6 @@ export class UsersService {
         from: EMAIL_USER,
         subject: '멍토피아 가입을 환영합니다.',
         html: mytemplate,
-        // html: `<b> ${name}님 가입을 환영합니다.</b>`, // The `.pug` or `.hbs` extension is appended automatically.
       })
       .catch((err) => {
         throw new err();

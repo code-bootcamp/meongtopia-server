@@ -29,8 +29,7 @@ export class PaymentService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
-      //1. payment 테이블에 거래기록 한줄 생성
-      //유저 정보 불러오기
+      //1. payment
       const user = await queryRunner.manager.findOne(User, {
         where: { email: _user.email },
         lock: { mode: 'pessimistic_write' },
@@ -45,20 +44,16 @@ export class PaymentService {
       await queryRunner.manager.save(payment);
 
       const point = user.point + amount;
-      //3.유저의 돈 업데이트->유저가 얼마를 가지고 있는지 알아야함! 그래야 돈 업데이트 가능~
       const updateUser = this.userRepository.create({
         ...user,
         point,
       });
       await queryRunner.manager.save(updateUser);
-
-      //데이터 확정짓기
       await queryRunner.commitTransaction();
 
       //4.최종결과 프론트에 돌려주기
       return payment;
     } catch (error) {
-      //에러 만나면 롤백하기
       await queryRunner.rollbackTransaction();
     } finally {
       //connection을 풀어주기
@@ -100,16 +95,11 @@ export class PaymentService {
       //취소 정보 저장
       await queryRunner.manager.save(updatedUser);
 
-      //데이터 확정짓기
       await queryRunner.commitTransaction();
-
-      //프론트에 최종값 돌려주기.
       return payment;
     } catch (error) {
-      //에러 만나면 롤백하기
       await queryRunner.rollbackTransaction();
     } finally {
-      //connection을 풀어주기
       await queryRunner.release();
     }
   }
@@ -153,8 +143,6 @@ export class PaymentService {
 
   //생성하려는 결제정보랑 토큰에 들어있는 결제 정보랑 같은지 검증하기.
   async validate({ impUid, amount, getPaymentData }) {
-    //토큰을 통한 impUid랑 생성하려는 impUid와 동일한지 확인하기->정보를 불러오는데서 이미걸러짐.
-
     //결제한 건이 아닐경우
     if (getPaymentData.status !== 'paid') {
       throw new ConflictException('결제 내역이 존재하지 않습니다.');

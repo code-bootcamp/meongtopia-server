@@ -9,14 +9,13 @@ import axios from 'axios';
 export class IamportService {
   async getToken() {
     try {
-      //인증 토큰 받기
       const token = await axios({
         url: 'https://api.iamport.kr/users/getToken',
-        method: 'post', // POST method
-        headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
         data: {
-          imp_key: process.env.IAMPORT_CLIENT_ID, // REST API키
-          imp_secret: process.env.IAMPORT_CLIENT_SECRET, // REST API Secret
+          imp_key: process.env.IAMPORT_CLIENT_ID,
+          imp_secret: process.env.IAMPORT_CLIENT_SECRET,
         },
       });
       const { access_token } = token.data.response;
@@ -34,9 +33,9 @@ export class IamportService {
     try {
       const access_token = getToken;
       const getPaymentData = await axios({
-        url: `https://api.iamport.kr/payments/${impUid}`, // imp_uid 전달
+        url: `https://api.iamport.kr/payments/${impUid}`,
         method: 'get', // GET method
-        headers: { Authorization: `Bearer ${access_token}` }, // 인증 토큰 Authorization header에 추가 해보고 안되면 berar지우기
+        headers: { Authorization: `Bearer ${access_token}` },
       });
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
 
@@ -46,7 +45,6 @@ export class IamportService {
         error.response.data.message,
         error.response.status,
       );
-      // throw new UnprocessableEntityException("impUid 값오류입니다.");
     }
   }
 
@@ -58,13 +56,12 @@ export class IamportService {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: access_token, // 아임포트 서버로부터 발급받은 엑세스 토큰
+          Authorization: access_token,
         },
         data: {
           reason, // 가맹점 클라이언트로부터 받은 환불사유
           imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
           amount, // 가맹점 클라이언트로부터 받은 환불금액
-          //   checksum: amount, // [권장] 환불 가능 금액 입력
         },
       });
       const { response } = getCancelData.data;
