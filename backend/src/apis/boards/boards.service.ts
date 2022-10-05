@@ -102,12 +102,18 @@ export class BoardsService {
     return board;
   }
 
-  async delete({ boardID }) {
+  async delete({ boardID, email }) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
     const board = await this.boardRepository.findOne({
-      where: { boardID },
+      where: {
+        boardID,
+        user: { userID: user.userID },
+      },
     });
     if (!board) {
-      throw new ConflictException('해당 내역이 없습니다.');
+      throw new ConflictException('잘못된 시도입니다.');
     }
     //이미지 지우기
     await this.boardImgRepository.delete({
