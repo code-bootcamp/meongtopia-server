@@ -72,8 +72,10 @@ export class BoardsResolver {
   @Mutation(() => Boolean)
   deleteBoard(
     @Args('boardID') boardID: string, //
+    @Context() context: any, //
   ) {
     //게시글 삭제
-    return this.boardsService.delete({ boardID });
+    const email = context.req.user.email;
+    return this.boardsService.delete({ boardID, email });
   }
 }
