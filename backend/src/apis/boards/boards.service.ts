@@ -76,6 +76,10 @@ export class BoardsService {
       relations: ['boardImg'],
     });
 
+    if (!beforeBoard) {
+      throw new ConflictException('잘못된 시도입니다.');
+    }
+
     //기존 이미지 지우기
     const boardImges = beforeBoard.boardImg;
     for (let i = 0; i < boardImges.length; i++) {
@@ -99,6 +103,7 @@ export class BoardsService {
         url,
       });
     }
+
     return board;
   }
 
