@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "cSpell.words": [
+    "Auths",
+    "codecamp",
+    "constspeeds",
+    "IAMPORT",
+    "kakao",
+    "mypayment",
+    "myproduct",
+    "naver",
+    "nestjs",
+    "nums",
+    "Orkey",
+    "Reviewes",
+    "Saleslocation",
+    "Soldout",
+    "typeorm"
+  ]
+}
