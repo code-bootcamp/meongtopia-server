@@ -20,7 +20,7 @@
 애견카페의 운영자들에겐 카페 정보를 더 편리하게 등록하고 홍보를 할 수 있는 플랫폼입니다.
 
 <div><h2>배포 주소</h2></div>
-
+| 멍토피아 : https://meongtopia.site/
 
 <div><h2>📚 기술스택</h2></div>
 <img src="https://cdn.discordapp.com/attachments/1010070894116347905/1022393027530076260/c0b04cd060d35d9b.jpg">
